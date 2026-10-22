@@ -5,7 +5,7 @@
 
 TRACEFORGE is a learning-focused developer tool for computer-science students. It is designed to connect a reproducible program failure to evidence, guided understanding, algorithm analysis, and a verified fix—rather than returning an unexplained answer.
 
-> **Repository status:** Foundation/bootstrap phase. This repository was empty at the time of initialization. The initial implementation plan is deliberately staged: establish the product contract and a small, testable vertical slice before adding every subject lab.
+> **Repository status (2026-10-22):** Documentation foundation is present, but the application has **not been scaffolded yet**. There is currently no `package.json`, `src/` application code, test suite, or CI workflow. The features below are planned behavior, not claims about an implemented app. The first build milestone is a small, testable Binary Search debugging vertical slice.
 
 ## Product promise
 
@@ -54,23 +54,27 @@ Browser execution is not a hardened server sandbox. Do not send arbitrary user c
 
 ## Repository map
 
-The implementation/specification branch will add:
+Current tracked files:
+- `README.md` — project overview and current status.
 - `docs/MASTER_SPEC.md` — product, architecture, data contracts, rules, security and decisions.
 - `docs/BUILD_PLAN.md` — incremental implementation roadmap and acceptance gates.
 - `docs/FOUR_SUBJECT_MAPPING.md` — concept-to-feature mapping, assumptions and scope boundaries.
-- `docs/CLAUDE_CODE_MASTER_PROMPT.md` — instructions for repository-aware, phase-based implementation.
-- `src/` and application configuration — initial app scaffold and vertical-slice starting point.
+- `docs/CLAUDE_CODE_MASTER_PROMPT.md` — repository-aware, phase-based implementation instructions.
+- `.env.example` — safe template with no real secrets.
+- `.gitignore` — ignores local environment files and generated artifacts.
+
+**Not yet present:** `package.json`, `src/`, tests, CI workflow, and a license file. These must be deliberately added/decided during the app bootstrap; do not assume the application can run yet.
 
 ## Local development
 
-Prerequisites: Node.js LTS and npm.
+**The app is not runnable yet.** Because `package.json` and application source have not been added, `npm install` and `npm run dev` are not available at this stage. First complete Phase 0 of `docs/BUILD_PLAN.md` to scaffold the app and define scripts. After that scaffold exists, use:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Quality checks (after scaffold scripts are present):
+Quality checks (only after the matching scripts are implemented):
 
 ```bash
 npm run lint
