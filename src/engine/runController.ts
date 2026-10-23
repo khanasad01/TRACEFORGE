@@ -45,8 +45,9 @@ export function runChallenge(
     allTrace.push(...trace);
   }
 
-  const anyFailed = allResults.some((r) => r.status === 'failed' || r.status === 'error');
-  const status: RunStatus = anyFailed ? 'failed' : 'passed';
+  const anyError = allResults.some((r) => r.status === 'error');
+  const anyFailed = allResults.some((r) => r.status === 'failed');
+  const status: RunStatus = anyError ? 'runtime_error' : anyFailed ? 'failed' : 'passed';
 
   return {
     schemaVersion: '1.0',

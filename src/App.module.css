@@ -22,6 +22,8 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .brand {
@@ -44,25 +46,44 @@
 
 .tagline {
   font-size: 0.75rem;
-  color: #475569;
+  color: #64748b;
   border-left: 1px solid #334155;
   padding-left: 0.5rem;
   margin-left: 0.25rem;
 }
 
-.meta {
+/* Module navigation tabs */
+.moduleNav {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  background: #020817;
+  padding: 0.25rem;
+  border-radius: 8px;
+  border: 1px solid #1e293b;
+  flex-wrap: wrap;
 }
 
-.subject {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  background: #1e3a5f;
-  color: #60a5fa;
+.navTab {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.navTab:hover {
+  color: #f1f5f9;
+  background: #1e293b;
+}
+
+.activeTab {
+  background: #2563eb !important;
+  color: #ffffff !important;
 }
 
 /* Challenge description */
@@ -72,18 +93,34 @@
   border-bottom: 1px solid #1e293b;
 }
 
+.challengeMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
 .challengeTitle {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #f1f5f9;
-  margin: 0 0 0.4rem;
+  margin: 0;
+}
+
+.subjectTag {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #1e3a5f;
+  color: #60a5fa;
+  font-weight: 600;
 }
 
 .challengeDesc {
   font-size: 0.82rem;
-  color: #64748b;
+  color: #94a3b8;
   margin: 0;
-  max-width: 80ch;
+  max-width: 85ch;
   line-height: 1.6;
   white-space: pre-line;
 }
@@ -92,15 +129,72 @@
 .main {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1.25rem;
   padding: 1rem 1.5rem;
   flex: 1;
   align-items: start;
 }
 
+.standaloneMain {
+  padding: 1.25rem 1.5rem;
+  flex: 1;
+}
+
 @media (max-width: 900px) {
   .main {
     grid-template-columns: 1fr;
+    padding: 0.75rem 1rem;
+  }
+
+  .standaloneMain {
+    padding: 0.75rem 1rem;
+  }
+
+  .leftCol {
+    position: static;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .brand {
+    flex-wrap: wrap;
+  }
+
+  .tagline {
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .moduleNav {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .navTab {
+    flex: 1;
+    text-align: center;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .buttons {
+    display: flex;
+    width: 100%;
+  }
+
+  .runBtn, .resetBtn {
+    flex: 1;
+    text-align: center;
   }
 }
 
@@ -188,18 +282,97 @@
 .resetBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 .resetBtn:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
 
+/* Complexity Card */
+.complexityCard {
+  background: #0f172a;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.complexityHeading {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.metricBox {
+  background: #020817;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+}
+
+.metricLabel {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.metricBox strong {
+  font-size: 1.1rem;
+  color: #38bdf8;
+  font-family: monospace;
+}
+
+.metricBox small {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+.complexityNote {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
 /* Run metadata */
 .runMeta {
   display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.72rem;
-  color: #334155;
+  color: #475569;
 }
 
 .runMeta code {
-  color: #475569;
+  color: #64748b;
   font-family: monospace;
+}
+
+.exportBtn {
+  background: #0f172a;
+  color: #60a5fa;
+  border: 1px solid #3b82f640;
+  border-radius: 6px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.exportBtn:hover {
+  background: #1e3a5f;
+  color: #93c5fd;
+  border-color: #3b82f6;
+}
+
+.exportBtn:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
 /* Section gaps */
@@ -222,7 +395,7 @@
 
 .footer p {
   font-size: 0.72rem;
-  color: #334155;
+  color: #475569;
   margin: 0;
   text-align: center;
 }

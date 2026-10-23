@@ -50,13 +50,13 @@ export function TraceViewer({ trace, activeTestId }: Props) {
       <h3 className={styles.heading}>Execution Trace</h3>
       {activeTestId && (
         <p className={styles.subtitle}>
-          Showing reference trace for: <code>{activeTestId}</code>
+          Showing actual execution trace for: <code>{activeTestId}</code>
         </p>
       )}
       <p className={styles.note}>
-        The trace reflects the <strong>correct algorithm</strong>'s execution
-        path — use it to understand what the right implementation does step by
-        step, then compare with your code's behavior.
+        This trace reflects your submitted implementation's step-by-step
+        execution path on this test case. Inspect loop conditions, variable updates,
+        and comparisons to locate where the logic diverges.
       </p>
       <div className={styles.tableWrap}>
         <table className={styles.table} aria-label="Execution trace">

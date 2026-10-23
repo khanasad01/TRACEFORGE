@@ -16,6 +16,7 @@
  */
 
 import type { TestCase, TestResult, TraceEvent } from '../types/domain';
+import { interpretBinarySearchWithTrace } from './safeInterpreter';
 
 // ---------------------------------------------------------------------------
 // Trace-instrumented reference implementations
@@ -159,7 +160,6 @@ export function runStudentCode(
     }
     return binarySearch(array, target);
   `;
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval
   const fn = new Function('array', 'target', wrapped);
   const result = fn(array, target) as unknown;
   if (typeof result !== 'number') {
@@ -174,27 +174,28 @@ export function runStudentCode(
 
 /**
  * Run a single test case against the student's source code and return a
- * TestResult. The trace is generated from the REFERENCE implementation so
- * we always have deterministic evidence regardless of student bugs.
+ * TestResult along with the genuine execution trace produced by interpreting
+ * the student's submission.
  */
 export function runTestCase(
   testCase: TestCase,
   sourceCode: string,
 ): { testResult: TestResult; trace: TraceEvent[] } {
-  // Always generate reference trace for evidence — the trace reflects
-  // the correct algorithm's execution path for this input.
-  const { trace } = runBinarySearchWithTrace(
-    testCase.array,
-    testCase.target,
-    testCase.id,
-  );
-
   let actual: number;
   let status: TestResult['status'];
   let message: string | undefined;
+  let trace: TraceEvent[] = [];
 
   try {
-    actual = runStudentCode(sourceCode, [...testCase.array], testCase.target);
+    const exec = interpretBinarySearchWithTrace(
+      sourceCode,
+      [...testCase.array],
+      testCase.target,
+      testCase.id,
+    );
+    actual = exec.result;
+    trace = exec.trace;
+
     if (actual === testCase.expected) {
       status = 'passed';
     } else {
@@ -205,6 +206,15 @@ export function runTestCase(
     actual = -999;
     status = 'error';
     message = err instanceof Error ? err.message : String(err);
+    trace = [
+      {
+        step: 1,
+        event: 'init',
+        variables: { error: message },
+        evidenceRef: testCase.id,
+        note: `Execution halted with error: ${message}`,
+      },
+    ];
   }
 
   return {

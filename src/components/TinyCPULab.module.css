@@ -1,0 +1,290 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.header {
+  background: #0f172a;
+  padding: 1.25rem;
+  border-radius: 8px;
+  border: 1px solid #1e293b;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.programSelector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #020817;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #1e293b;
+}
+
+.programSelector label {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.programSelector select {
+  background: #1e293b;
+  color: #f8fafc;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.programSelector select:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.title {
+  margin: 0 0 0.4rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.desc {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  max-width: 75ch;
+  line-height: 1.5;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 850px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: #0f172a;
+  padding: 1.25rem;
+  border-radius: 8px;
+  border: 1px solid #1e293b;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.cardHeading {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #e2e8f0;
+}
+
+.btnRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.runBtn {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.runBtn:hover {
+  background: #1d4ed8;
+}
+
+.resetBtn {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #334155;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.editor {
+  width: 100%;
+  background: #020817;
+  color: #f8fafc;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  padding: 0.75rem;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  resize: vertical;
+}
+
+.errorBox {
+  background: #450a0a;
+  color: #fca5a5;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.isaCheatSheet {
+  margin-top: 0.8rem;
+  padding: 0.5rem 0.75rem;
+  background: #020817;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+.isaCheatSheet code {
+  color: #60a5fa;
+  font-family: monospace;
+}
+
+.stateDisplay {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.statusRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.5rem;
+  background: #020817;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #1e293b;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+.statusRow code {
+  color: #38bdf8;
+}
+
+.subHeading {
+  margin: 0.5rem 0 0.3rem;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.regGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.regBox {
+  background: #020817;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.regName {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.regVal {
+  font-size: 0.95rem;
+  color: #38bdf8;
+  font-family: monospace;
+  font-weight: 700;
+}
+
+.regVal small {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.memGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+}
+
+.memCell {
+  background: #020817;
+  padding: 0.35rem 0.2rem;
+  border-radius: 4px;
+  border: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.memAddr {
+  font-size: 0.65rem;
+  color: #64748b;
+}
+
+.memVal {
+  font-size: 0.8rem;
+  color: #e2e8f0;
+  font-family: monospace;
+}
+
+.emptyPrompt {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  text-align: left;
+}
+
+.table th, .table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.table th {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.hazardRow {
+  background: #7c2d1215;
+}
+
+.hazardBadge {
+  color: #fb923c;
+  font-size: 0.75rem;
+}
+
+.cleanStage {
+  color: #4ade80;
+  font-size: 0.75rem;
+}

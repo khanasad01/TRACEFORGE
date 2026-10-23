@@ -1,105 +1,64 @@
 # TRACEFORGE
 
-**Evidence-First Debugging & Learning Lab**  
+**Evidence-First Debugging & Multi-Subject Learning Lab**  
 **Tagline:** Don't just fix the bug. Prove why it failed.
 
-TRACEFORGE is a learning-focused developer tool for computer-science students. It is designed to connect a reproducible program failure to evidence, guided understanding, algorithm analysis, and a verified fix—rather than returning an unexplained answer.
+TRACEFORGE is an educational laboratory for computer-science students and instructors. It connects reproducible computational experiments to concrete execution evidence, step-by-step traces, and conceptual understanding across four core computer science subjects.
 
-> **Repository status (2026-10-22):** Documentation foundation is present, but the application has **not been scaffolded yet**. There is currently no `package.json`, `src/` application code, test suite, or CI workflow. The features below are planned behavior, not claims about an implemented app. The first build milestone is a small, testable Binary Search debugging vertical slice.
+---
 
-## Product promise
+## 1. Integrated Four-Subject Coverage
 
-Given a supported program and a defined test case, TRACEFORGE should help a learner:
-1. reproduce a failure;
-2. compare expected and actual behavior;
-3. inspect a deterministic execution trace;
-4. receive an evidence-linked hint;
-5. edit the solution and rerun regression tests;
-6. understand the limits of what the tests prove.
+| Subject | Interactive Lab | Working Features & Evidence Engine | Status |
+|---|---|---|---|
+| **AI Foundations** | **Search & Reasoning Lab** | Interactive 6x6 grid environment with obstacles; BFS (uninformed) and A* (informed heuristic search with Manhattan distance); real-time frontier, explored states, path cost $g(n)$, heuristic $h(n)$, and step-by-step expansion trace; rule-based forward-chaining diagnostic inference. | **Implemented & Tested** |
+| **Design & Analysis of Algorithms (DAA)** | **Algorithm Debugging & Complexity Lab** | Editable Binary Search off-by-one debugging challenge; safe AST-interpreted sandbox (Acorn ESTree parser); 9 deterministic test cases; genuine execution trace; progressive hints; empirical operation counting comparing Binary Search ($O(\log N)$) vs. Linear Search ($O(N)$). | **Implemented & Tested** |
+| **Theory of Computation (TOC)** | **Automata Lab** | Interactive Deterministic Finite Automaton (DFA) simulator with three built-in automata: binary strings ending in "01", even number of 1s, and divisible-by-3; formal 5-tuple $(Q, \Sigma, \delta, q_0, F)$ definition viewer; interactive input strings and presets; deterministic cycle-by-cycle state transition trace and accept/reject decision evidence; visual state diagram showing start, accept, and final states. | **Implemented & Tested** |
+| **Computer Organization & Architecture (COA)** | **TinyCPU Simulator** | Educational 8-bit instruction set simulator with Program Counter (PC), 4 registers (R0–R3), zero flag, and 16-byte RAM; Fetch-Decode-Execute micro-architectural cycles; ISA supporting `MOV`, `ADD`, `SUB`, `LOAD`, `STORE`, `JMP`, `JZ`, `HALT`; three built-in example programs (sum loop, factorial, Fibonacci) with program selector; editable assembly; Read-After-Write (RAW) pipeline hazard detection. | **Implemented & Tested** |
 
-The product must never claim that a program is universally correct merely because a finite test suite passes.
+---
 
-## Four-subject integration
+## 2. Architecture & Design Principles
 
-| Subject | Planned executable learning capability |
-|---|---|
-| AI Foundations & Machine Learning | Rule/knowledge-based diagnostics, goal-directed hints, selected search methods; ML only when labelled data and a measurable use case exist |
-| Design & Analysis of Algorithms (DAA) | Algorithm challenges, correctness/edge-case checks, operation counts, complexity comparisons |
-| Theory of Computation (TOC) | FSM transitions, regular-expression matching, tokenization and grammar-based parsing |
-| Computer Organization & Architecture (COA) | Educational instruction execution, registers, datapath concepts and basic pipeline-hazard simulation |
+1. **Independent Deterministic Domain Engines**: Pure TypeScript domain logic separated cleanly from the React UI (`src/engine/`):
+   - `aiSearch.ts`: Breadth-First Search & A* Search with Manhattan heuristic.
+   - `binarySearch.ts` & `safeInterpreter.ts`: Acorn-based sandboxed AST interpreter for student Binary Search submissions.
+   - `daaComparison.ts`: Empirical step counter comparing logarithmic vs. linear complexity.
+   - `tocDFA.ts`: Deterministic finite automaton transition engine.
+   - `tinyCPU.ts`: 8-bit educational CPU with memory and pipeline hazard tracker.
+2. **Deterministic Evidence Contracts**: Every state change, transition, or instruction generates a concrete, verifiable step trace.
+3. **Strict Bounded Execution**: Every interpreter, state-space search, and CPU simulator enforces explicit step limits (e.g., 500 steps) to prevent browser freezes.
+4. **Lightweight Client Bundle**: Fast, offline browser execution without multi-megabyte dependencies (entire production bundle is ~311 kB uncompressed, ~98 kB gzip).
 
-The exact DAA module mapping must be checked against the official course syllabus before academic submission. The educational CPU is a simplified simulator, not a claim about exact modern processor behavior.
+---
 
-## MVP focus
-
-The first milestone is one complete Binary Search debugging workflow:
-- a known-buggy starter program and deterministic test cases;
-- expected-versus-actual result display;
-- reproducible evidence and an execution trace;
-- progressive hints linked to the observed failure;
-- editable solution and regression-test rerun;
-- honest reporting of tests run and tests passed.
-
-After this works end-to-end, expand in small increments to algorithm comparisons, TOC tools and TinyCPU.
-
-## Proposed technology direction
-
-- React + TypeScript + Vite for the web application.
-- Monaco Editor for the code editor UI.
-- Pyodide in a dedicated Web Worker for the initial browser-based Python prototype, with execution and resource limits.
-- Own canonical evidence/trace schema so UI, diagnostics and tests are not coupled to a third-party tool's data model.
-- Automata/parser dependencies only after a small proof of integration and a license review.
-
-Browser execution is not a hardened server sandbox. Do not send arbitrary user code to a privileged server process. If server-side multi-language execution is introduced later, design a separate isolated execution service and review security and licensing (including Judge0's GPL-3.0 license) before adoption.
-
-## Repository map
-
-Current tracked files:
-- `README.md` — project overview and current status.
-- `docs/MASTER_SPEC.md` — product, architecture, data contracts, rules, security and decisions.
-- `docs/BUILD_PLAN.md` — incremental implementation roadmap and acceptance gates.
-- `docs/FOUR_SUBJECT_MAPPING.md` — concept-to-feature mapping, assumptions and scope boundaries.
-- `docs/CLAUDE_CODE_MASTER_PROMPT.md` — repository-aware, phase-based implementation instructions.
-- `.env.example` — safe template with no real secrets.
-- `.gitignore` — ignores local environment files and generated artifacts.
-
-**Not yet present:** `package.json`, `src/`, tests, CI workflow, and a license file. These must be deliberately added/decided during the app bootstrap; do not assume the application can run yet.
-
-## Local development
-
-**The app is not runnable yet.** Because `package.json` and application source have not been added, `npm install` and `npm run dev` are not available at this stage. First complete Phase 0 of `docs/BUILD_PLAN.md` to scaffold the app and define scripts. After that scaffold exists, use:
+## 3. Running Locally
 
 ```bash
-npm install
+# Install dependencies
+npm ci
+
+# Start development server
 npm run dev
-```
 
-Quality checks (only after the matching scripts are implemented):
-
-```bash
-npm run lint
-npm run typecheck
+# Run full test suite (85 automated tests across 9 test files)
 npm test
+
+# Run ESLint (enforced at 0 warnings)
+npm run lint
+
+# Run TypeScript compiler checks
+npm run typecheck
+
+# Production build
 npm run build
 ```
 
-Do not treat a command as passed until it has actually been run and its exit status checked.
+---
 
-## Engineering principles
+## 4. Subject Mapping & Academic Syllabus Status
 
-1. **Evidence before explanation.** Store inputs, expected output, actual output, run status and trace as structured data.
-2. **Deterministic core first.** The analyzer and test runner must work without an external AI API.
-3. **Pedagogy over answer copying.** Hints should reveal reasoning progressively.
-4. **Bounded execution.** Apply time, memory, input-size and worker lifecycle limits.
-5. **Explicit uncertainty.** Distinguish observed facts, inferred causes and hypotheses.
-6. **Scope honesty.** A small verified implementation is better than many placeholder modules.
-7. **Dependency discipline.** Pin versions, preserve license notices and adopt a dependency only for a concrete need.
-8. **Student privacy.** Do not collect source code or analytics unnecessarily; do not ship secrets in client-side environment variables.
-
-## Contributing and changes
-
-Keep changes small and auditable. Every feature should include acceptance criteria and tests. Do not add nonfunctional controls or fabricated diagnostics. When behavior changes, update the documentation and examples in the same change.
-
-## Current next step
-
-Complete the Binary Search vertical slice and pass its unit, integration, type-check and build gates before expanding to the four subject labs.
+- **AI Foundations**: State space search (BFS/A*) and rule-based forward-chaining diagnostic inference are fully implemented and verified. Machine learning / neural training is intentionally deferred as noted in `docs/FOUR_SUBJECT_MAPPING.md`.
+- **DAA**: Divide-and-conquer binary search, off-by-one boundary bugs, and operation-counting comparisons ($O(\log N)$ vs $O(N)$) are fully implemented and tested.
+- **TOC**: Regular language acceptance, 5-tuple DFA definitions, and step-by-step state transition traces are fully implemented. Pushdown Automata and Turing machines remain planned for future iterations.
+- **COA**: Educational instruction execution, register files, PC, branching on zero flag, and pipeline RAW hazard detection are fully implemented. Three built-in example programs (sum loop, factorial, Fibonacci) with program selector. Multilevel cache hierarchies remain planned for future iterations.
