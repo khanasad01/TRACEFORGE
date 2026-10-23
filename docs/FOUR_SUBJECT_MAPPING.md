@@ -56,6 +56,6 @@ This document maps concepts to actual product behavior. A concept counts as “i
 | Instruction Set Architecture (ISA) | `MOV`, `ADD`, `SUB`, `LOAD`, `STORE`, `JMP`, `JZ`, `HALT` with three built-in example programs (sum loop, factorial, Fibonacci) | `src/engine/tinyCPU.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 | Micro-architectural Cycle | Fetch → Decode → Execute cycle trace recording full machine state before and after each instruction | `src/engine/tinyCPU.ts` | **Implemented** |
 | Pipeline Hazard Tracking | Read-After-Write (RAW) data dependency hazard detection and stall advisory | `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
-| Cache Hierarchy | Direct-mapped / associative cache hit/miss simulation | Deferred | **Planned** |
+| Cache Hierarchy | Direct-mapped and set-associative cache simulation with LRU/FIFO replacement policies, configurable size/block/associativity, hit-miss tracking with detailed trace, and thrashing pattern demonstration | `src/engine/cacheSim.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 
 *Note: TinyCPU is an educational simulator for conceptual understanding, not a cycle-accurate commercial hardware model.*

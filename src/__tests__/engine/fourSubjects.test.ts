@@ -26,6 +26,7 @@ import {
   programRegistry,
 } from '../../engine/tinyCPU';
 import { compareSearchOperations } from '../../engine/daaComparison';
+import { simulateCache, cacheConfigs } from '../../engine/cacheSim';
 
 describe('AI Foundations — BFS and A* Search', () => {
   it('BFS finds optimal path on default grid', () => {
@@ -293,5 +294,73 @@ describe('DAA — Complexity and Operation Counting', () => {
     expect(metrics.binaryOperations).toBeLessThanOrEqual(5); // log2(16) + 1
     expect(metrics.theoreticalLinear).toBe('O(N)');
     expect(metrics.theoreticalBinary).toBe('O(log N)');
+  });
+});
+
+describe('COA — Cache Hierarchy Simulation', () => {
+  it('cacheConfigs contains all pre-built configurations', () => {
+    expect(cacheConfigs['direct-mapped-1KB-16B']).toBeDefined();
+    expect(cacheConfigs['direct-mapped-4KB-16B']).toBeDefined();
+    expect(cacheConfigs['2-way-set-assoc-1KB-16B']).toBeDefined();
+    expect(cacheConfigs['4-way-set-assoc-4KB-16B']).toBeDefined();
+    expect(cacheConfigs['8-way-set-assoc-8KB-16B-FIFO']).toBeDefined();
+  });
+
+  it('direct-mapped cache has lower associativity than set-associative', () => {
+    const dm = cacheConfigs['direct-mapped-1KB-16B'];
+    const sa = cacheConfigs['2-way-set-assoc-1KB-16B'];
+    expect(dm.associativity).toBe(1);
+    expect(sa.associativity).toBe(2);
+    expect(dm.replacementPolicy).toBe('LRU');
+    expect(sa.replacementPolicy).toBe('LRU');
+  });
+
+  it('FIFO config uses FIFO replacement policy', () => {
+    const fifoConfig = cacheConfigs['8-way-set-assoc-8KB-16B-FIFO'];
+    expect(fifoConfig.replacementPolicy).toBe('FIFO');
+  });
+
+  it('sequential access pattern shows high hit rate after first access', () => {
+    // Same block repeated — all hits after first miss
+    const config = cacheConfigs['direct-mapped-4KB-16B'];
+    const addresses = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3]; // All in same block
+    const result = simulateCache(config, addresses, undefined);
+    expect(result.totalAccesses).toBe(12);
+    expect(result.hits).toBeGreaterThan(0);
+    expect(result.misses).toBeGreaterThan(0);
+    expect(result.hitRate).toBeGreaterThan(0.5);
+  });
+
+  it('repeated access to same block is a hit', () => {
+    const config = cacheConfigs['direct-mapped-4KB-16B'];
+    const addresses = [0, 0, 0, 0];
+    const result = simulateCache(config, addresses);
+    expect(result.hits).toBe(3); // First is miss, next 3 are hits
+    expect(result.misses).toBe(1);
+    expect(result.trace[0].hit).toBe(false);
+    expect(result.trace[1].hit).toBe(true);
+  });
+
+  it('trace contains set index and tag information', () => {
+    const config = cacheConfigs['direct-mapped-4KB-16B'];
+    const result = simulateCache(config, [0]);
+    expect(result.trace.length).toBe(1);
+    expect(result.trace[0].setIndex).toBeGreaterThanOrEqual(0);
+    expect(result.trace[0].tag).toBe(0); // Address 0 → tag 0 for 4KB cache with 16B block, 256 sets
+    expect(result.trace[0].hit).toBe(false); // Cold miss
+  });
+
+  it('LRU eviction works on thrashing pattern', () => {
+    // Two blocks that map to the same set in a direct-mapped cache
+    const config = cacheConfigs['direct-mapped-1KB-16B'];
+    // 1KB cache, 16B block = 64 sets, 64 bytes per set
+    // Addresses 0 (tag=0, set=0) and 1024 (tag=1, set=0) map to same set
+    // Each access is a cold/compulsory miss, and they evict each other
+    const addresses = [0, 1024, 0, 1024, 0, 1024]; // Thrashing between two blocks
+    const result = simulateCache(config, addresses);
+    expect(result.misses).toBe(6); // All misses due to thrashing
+    expect(result.trace[0].hit).toBe(false); // cold miss
+    expect(result.trace[2].hit).toBe(false); // evicted by address 1024
+    expect(result.trace[4].hit).toBe(false); // evicted again
   });
 });
