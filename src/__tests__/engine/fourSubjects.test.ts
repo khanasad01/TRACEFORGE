@@ -1,5 +1,17 @@
 import { describe, it, expect } from 'vitest';
-import { runBFS, runAStar, createDefaultGrid } from '../../engine/aiSearch';
+import {
+  runBFS,
+  runDFS,
+  runUCS,
+  runGreedyBestFirst,
+  runAStar,
+  createDefaultGrid,
+  createEmptyBoard,
+  applyMove,
+  checkWinner,
+  findBestMove,
+  type Board,
+} from '../../engine/aiSearch';
 import {
   simulateDFA,
   binaryEndingIn01DFA,
@@ -35,6 +47,126 @@ describe('AI Foundations — BFS and A* Search', () => {
     // A* should explore fewer or equal states compared to BFS on targeted path
     const bfs = runBFS(map);
     expect(result.nodesExplored).toBeLessThanOrEqual(bfs.nodesExplored + 2);
+  });
+});
+
+describe('AI Foundations — DFS, UCS, Greedy Best-First Search', () => {
+  const map = createDefaultGrid();
+
+  it('DFS finds a path to goal (not necessarily optimal)', () => {
+    const result = runDFS(map);
+    expect(result.algorithm).toBe('DFS');
+    expect(result.found).toBe(true);
+    expect(result.path[0]).toEqual(map.start);
+    expect(result.path[result.path.length - 1]).toEqual(map.goal);
+    expect(result.trace.length).toBeGreaterThan(0);
+    expect(result.trace.every((t) => t.action)).toBe(true);
+  });
+
+  it('UCS finds a path to goal', () => {
+    const result = runUCS(map);
+    expect(result.algorithm).toBe('UCS');
+    expect(result.found).toBe(true);
+    expect(result.path[0]).toEqual(map.start);
+    expect(result.path[result.path.length - 1]).toEqual(map.goal);
+    expect(result.nodesExplored).toBeGreaterThan(0);
+  });
+
+  it('Greedy Best-First finds a path to goal', () => {
+    const result = runGreedyBestFirst(map);
+    expect(result.algorithm).toBe('Greedy');
+    expect(result.found).toBe(true);
+    expect(result.path[0]).toEqual(map.start);
+    expect(result.path[result.path.length - 1]).toEqual(map.goal);
+    expect(result.nodesExplored).toBeGreaterThan(0);
+  });
+
+  it('All algorithms find a path on default grid', () => {
+    const bfs = runBFS(map);
+    const dfs = runDFS(map);
+    const ucs = runUCS(map);
+    const greedy = runGreedyBestFirst(map);
+    const astar = runAStar(map);
+
+    expect(bfs.found).toBe(true);
+    expect(dfs.found).toBe(true);
+    expect(ucs.found).toBe(true);
+    expect(greedy.found).toBe(true);
+    expect(astar.found).toBe(true);
+  });
+});
+
+describe('AI Foundations — Minimax with Alpha-Beta Pruning', () => {
+  it('findBestMove returns a valid move on empty board', () => {
+    const board = createEmptyBoard();
+    const result = findBestMove(board, 'X');
+    expect(result.bestMove.row).toBeGreaterThanOrEqual(0);
+    expect(result.bestMove.col).toBeGreaterThanOrEqual(0);
+    expect(result.bestMove.row).toBeLessThanOrEqual(2);
+    expect(result.bestMove.col).toBeLessThanOrEqual(2);
+  });
+
+  it('X playing first on empty board should pick center or corner', () => {
+    const board = createEmptyBoard();
+    const result = findBestMove(board, 'X');
+    // Center (1,1) or any corner is optimal first move
+    const isCenterOrCorner =
+      (result.bestMove.row === 1 && result.bestMove.col === 1) ||
+      (result.bestMove.row % 2 === 0 && result.bestMove.col % 2 === 0);
+    expect(isCenterOrCorner).toBe(true);
+  });
+
+  it('detects winning move when available', () => {
+    // X has two in a row on top row: X X _
+    const board: Board = [
+      ['X', 'X', null],
+      ['O', 'O', null],
+      [null, null, null],
+    ];
+    const result = findBestMove(board, 'X');
+    expect(result.bestMove).toEqual({ row: 0, col: 2 });
+  });
+
+  it('blocks opponent winning move', () => {
+    // O has two in a row on left column: O _ _, O _ _, _ _ _  — O threatens (2,0)
+    const board: Board = [
+      ['O', null, null],
+      ['O', null, null],
+      [null, null, null],
+    ];
+    const result = findBestMove(board, 'X');
+    // X should block O at (2, 0)
+    expect(result.bestMove).toEqual({ row: 2, col: 0 });
+  });
+
+  it('checkWinner detects horizontal win', () => {
+    const board: Board = [
+      ['X', 'X', 'X'],
+      ['O', 'O', null],
+      [null, null, null],
+    ];
+    expect(checkWinner(board, 'X')).toBe(true);
+    expect(checkWinner(board, 'O')).toBe(false);
+  });
+
+  it('checkWinner detects diagonal win', () => {
+    const board: Board = [
+      ['X', 'O', 'O'],
+      ['O', 'X', null],
+      [null, null, 'X'],
+    ];
+    expect(checkWinner(board, 'X')).toBe(true);
+  });
+
+  it('applyMove places player correctly and returns null on occupied cell', () => {
+    const board = createEmptyBoard();
+    const newBoard = applyMove(board, 1, 1, 'X');
+    expect(newBoard).not.toBeNull();
+    expect(newBoard![1][1]).toBe('X');
+    // Original board is not mutated
+    expect(board[1][1]).toBeNull();
+    // Occupied cell returns null
+    expect(applyMove(newBoard!, 1, 1, 'O')).toBeNull();
   });
 });
 

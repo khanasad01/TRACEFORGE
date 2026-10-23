@@ -9,6 +9,7 @@ import { TestResultPanel } from './components/TestResultPanel';
 import { TraceViewer } from './components/TraceViewer';
 import { HintPanel } from './components/HintPanel';
 import { AISearchLab } from './components/AISearchLab';
+import { TicTacToeLab } from './components/TicTacToeLab';
 import { TOCAutomataLab } from './components/TOCAutomataLab';
 import { TinyCPULab } from './components/TinyCPULab';
 import styles from './App.module.css';
@@ -282,7 +283,12 @@ export function App() {
 
       {activeModule === 'ai' && (
         <main className={styles.standaloneMain}>
-          <AISearchLab />
+          <div style={{ marginBottom: '1.5rem' }}>
+            <AISearchLab />
+          </div>
+          <div>
+            <TicTacToeLab />
+          </div>
         </main>
       )}
 

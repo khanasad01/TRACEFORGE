@@ -10,8 +10,12 @@ This document maps concepts to actual product behavior. A concept counts as “i
 |---|---|---|---|
 | State-Space Search | 6x6 grid with start (0,0), goal (5,5), and obstacles | `src/engine/aiSearch.ts` | **Implemented** |
 | Uninformed Search (BFS) | FIFO queue expansion, layer-by-layer exploration, guaranteed unweighted shortest path | `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
-| Informed Search (A*) | Priority queue with evaluation function $f(n) = g(n) + h(n)$ using Manhattan distance | `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
+| Informed Search (A*) | Priority queue with evaluation function $f(n) = g(n) + h(n)$ using Manhattan distance; full trace with all expansion steps (no truncation) | `src/engine/aiSearch.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
+| DFS (Depth-First Search) | LIFO frontier (stack), explores deep before backtracking; demonstrates non-optimality on grid search | `src/engine/aiSearch.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
+| UCS (Uniform-Cost Search) | Lowest-cost-first expansion with priority queue; optimal for weighted graphs | `src/engine/aiSearch.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
+| Greedy Best-First Search | Heuristic-only $h(n)$ priority queue; fast but not guaranteed optimal | `src/engine/aiSearch.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 | Knowledge Representation & Forward Chaining | Rule-based diagnostic forward chaining over evidence report to generate hints | `src/diagnostics/engine.ts`, `src/__tests__/diagnostics/engine.test.ts` | **Implemented** |
+| Minimax with Alpha-Beta Pruning | Optimal game-playing algorithm for perfect-information two-player games (Tic-Tac-Toe); alpha-beta pruning eliminates subtrees that cannot affect the decision | `src/engine/aiSearch.ts`, `src/components/TicTacToeLab.tsx`, `src/__tests__/engine/fourSubjects.test.ts`, `src/__tests__/ui/ticTacToe.test.tsx` | **Implemented** |
 | Regression/Neural Models | Held-out training/evaluation sets | Deferred until specific syllabus dataset requirements are provided | **Deferred** |
 
 *Note: The rule-based diagnostic engine represents classical AI knowledge representation and forward chaining, not statistical machine learning.*

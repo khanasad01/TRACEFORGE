@@ -1,14 +1,39 @@
 import { useState } from 'react';
-import { runBFS, runAStar, createDefaultGrid, type GridMap, type SearchResult } from '../engine/aiSearch';
+import {
+  runBFS,
+  runDFS,
+  runUCS,
+  runGreedyBestFirst,
+  runAStar,
+  createDefaultGrid,
+  type AlgorithmType,
+  type GridMap,
+  type SearchResult,
+} from '../engine/aiSearch';
 import styles from './AISearchLab.module.css';
+
+const ALGORITHMS: { value: AlgorithmType; label: string; description: string }[] = [
+  { value: 'A*', label: 'A*', description: 'Informed search — optimal with admissible heuristic' },
+  { value: 'BFS', label: 'BFS', description: 'Uninformed — guaranteed shortest path on unweighted grids' },
+  { value: 'DFS', label: 'DFS', description: 'Uninformed — explores deep before broad, not optimal' },
+  { value: 'UCS', label: 'UCS', description: 'Uninformed — lowest cost first, optimal for weighted grids' },
+  { value: 'Greedy', label: 'Greedy', description: 'Informed — greedy h(n) only, fast but not optimal' },
+];
 
 export function AISearchLab() {
   const [map] = useState<GridMap>(createDefaultGrid());
-  const [algorithm, setAlgorithm] = useState<'BFS' | 'A*'>('A*');
+  const [algorithm, setAlgorithm] = useState<AlgorithmType>('A*');
   const [result, setResult] = useState<SearchResult | null>(null);
 
   const handleRunSearch = () => {
-    const res = algorithm === 'BFS' ? runBFS(map) : runAStar(map);
+    let res: SearchResult;
+    switch (algorithm) {
+      case 'BFS': res = runBFS(map); break;
+      case 'DFS': res = runDFS(map); break;
+      case 'UCS': res = runUCS(map); break;
+      case 'Greedy': res = runGreedyBestFirst(map); break;
+      default: res = runAStar(map); break;
+    }
     setResult(res);
   };
 
@@ -33,11 +58,15 @@ export function AISearchLab() {
             <select
               id="algo-select"
               value={algorithm}
-              onChange={(e) => setAlgorithm(e.target.value as 'BFS' | 'A*')}
+              onChange={(e) => setAlgorithm(e.target.value as AlgorithmType)}
               className={styles.select}
+              aria-label="Select search algorithm"
             >
-              <option value="A*">A* (Heuristic Search)</option>
-              <option value="BFS">BFS (Breadth-First Search)</option>
+              {ALGORITHMS.map((algo) => (
+                <option key={algo.value} value={algo.value}>
+                  {algo.label} ({algo.description})
+                </option>
+              ))}
             </select>
           </div>
           <button className={styles.runBtn} onClick={handleRunSearch} aria-label="Run search algorithm">
@@ -108,7 +137,13 @@ export function AISearchLab() {
                 <p className={styles.note}>
                   {algorithm === 'A*'
                     ? 'A* uses evaluation function f(n) = g(n) + h(n), where h(n) is the admissible Manhattan distance heuristic, focusing exploration directly toward the goal.'
-                    : 'BFS explores systematically layer-by-layer without domain heuristics, which guarantees shortest path on unweighted graphs at the expense of expanding more frontier nodes.'}
+                    : algorithm === 'BFS'
+                      ? 'BFS explores systematically layer-by-layer without domain heuristics, which guarantees shortest path on unweighted graphs at the expense of expanding more frontier nodes.'
+                      : algorithm === 'DFS'
+                        ? 'DFS explores as deep as possible before backtracking using a LIFO stack. It is not guaranteed to find the shortest path but can be memory-efficient.'
+                        : algorithm === 'UCS'
+                          ? 'UCS expands the lowest-cost node first, guaranteeing an optimal path on weighted graphs. On unweighted grids it behaves like BFS.'
+                          : 'Greedy Best-First Search selects the node closest to the goal by heuristic h(n) alone, sacrificing optimality for speed.'}
                 </p>
               </div>
             </div>
