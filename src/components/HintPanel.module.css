@@ -1,0 +1,177 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.heading {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.empty {
+  font-size: 0.82rem;
+  color: #475569;
+}
+
+.success {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #052e16;
+  border: 1px solid #166534;
+  border-radius: 8px;
+}
+
+.successIcon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.success strong {
+  display: block;
+  color: #4ade80;
+  margin-bottom: 0.25rem;
+}
+
+.success p {
+  font-size: 0.8rem;
+  color: #86efac;
+  margin: 0;
+}
+
+/* Diagnostic items */
+.diagnosticsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.diagnostic {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border-left: 3px solid transparent;
+  background: #0f172a;
+}
+
+.confidenceTag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: inline-block;
+  margin-bottom: 0.25rem;
+}
+
+.statement {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  margin: 0 0 0.25rem;
+}
+
+.refs {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.refs code {
+  background: #1e293b;
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+  color: #93c5fd;
+  font-family: monospace;
+}
+
+/* Confidence variants */
+.observed {
+  border-left-color: #4ade80;
+}
+.observed .confidenceTag { color: #4ade80; }
+
+.inferred {
+  border-left-color: #fbbf24;
+}
+.inferred .confidenceTag { color: #fbbf24; }
+
+.hypothesis {
+  border-left-color: #a78bfa;
+}
+.hypothesis .confidenceTag { color: #a78bfa; }
+
+/* Hints */
+.hintsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #1e293b;
+}
+
+.hintsHeading {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.hintsNote {
+  font-size: 0.75rem;
+  color: #475569;
+  margin: 0;
+}
+
+.hint {
+  padding: 0.5rem 0.75rem;
+  background: #1e293b;
+  border-radius: 6px;
+  border-left: 3px solid #3b82f6;
+}
+
+.hintLevel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #60a5fa;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.hint p {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.hintBtn {
+  background: #1e293b;
+  color: #60a5fa;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  align-self: flex-start;
+}
+
+.hintBtn:hover {
+  background: #1d4ed8;
+  color: #eff6ff;
+}
+
+.hintBtn:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.hintsExhausted {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+}

@@ -1,0 +1,97 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.heading {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.25rem;
+}
+
+.note {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0 0 0.5rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.item {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #1e293b;
+  background: #0f172a;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.item:hover {
+  border-color: #334155;
+  background: #1e293b;
+}
+
+.item:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 1px;
+}
+
+.active {
+  border-color: #3b82f6 !important;
+  background: #1e3a5f !important;
+}
+
+.statusBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.testName {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.values {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.values code {
+  background: #1e293b;
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+  font-family: monospace;
+  color: #f1f5f9;
+}
+
+.message {
+  font-size: 0.75rem;
+  color: #f87171;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Status variants */
+.notRun { color: #475569; }
+.passed .statusBadge { color: #4ade80; }
+.failed .statusBadge { color: #f87171; }
+.failed { border-color: #7f1d1d; }
+.error .statusBadge { color: #fb923c; }
+.error { border-color: #7c2d12; }
+.skipped .statusBadge { color: #64748b; }

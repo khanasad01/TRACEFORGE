@@ -1,0 +1,228 @@
+* {
+  box-sizing: border-box;
+}
+
+.app {
+  min-height: 100vh;
+  background: #020817;
+  color: #e2e8f0;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  font-size: 1.4rem;
+  color: #3b82f6;
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #f1f5f9;
+}
+
+.tagline {
+  font-size: 0.75rem;
+  color: #475569;
+  border-left: 1px solid #334155;
+  padding-left: 0.5rem;
+  margin-left: 0.25rem;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.subject {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #1e3a5f;
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+/* Challenge description */
+.challengeBar {
+  padding: 1rem 1.5rem;
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+}
+
+.challengeTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 0.4rem;
+}
+
+.challengeDesc {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+  max-width: 80ch;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+/* Main layout */
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  flex: 1;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: sticky;
+  top: 4rem;
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.statusBadge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-family: monospace;
+}
+
+.statusIdle { background: #1e293b; color: #64748b; }
+.statusRunning { background: #1e3a5f; color: #60a5fa; animation: pulse 1s infinite; }
+.statusPassed { background: #052e16; color: #4ade80; }
+.statusFailed { background: #450a0a; color: #f87171; }
+.statusError { background: #431407; color: #fb923c; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.runCount {
+  font-weight: 400;
+  color: inherit;
+  opacity: 0.7;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.runBtn {
+  background: #1d4ed8;
+  color: #eff6ff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.runBtn:hover:not(:disabled) { background: #2563eb; }
+.runBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.runBtn:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
+
+.resetBtn {
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.resetBtn:hover:not(:disabled) { color: #94a3b8; border-color: #475569; }
+.resetBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.resetBtn:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
+
+/* Run metadata */
+.runMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.72rem;
+  color: #334155;
+}
+
+.runMeta code {
+  color: #475569;
+  font-family: monospace;
+}
+
+/* Section gaps */
+.traceSection {
+  border-top: 1px solid #1e293b;
+  padding-top: 1rem;
+}
+
+.hintSection {
+  border-top: 1px solid #1e293b;
+  padding-top: 1rem;
+}
+
+/* Footer */
+.footer {
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid #1e293b;
+  background: #0a0f1e;
+}
+
+.footer p {
+  font-size: 0.72rem;
+  color: #334155;
+  margin: 0;
+  text-align: center;
+}
