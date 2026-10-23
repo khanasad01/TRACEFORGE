@@ -79,3 +79,36 @@ describe('diagnose — runtime error code', () => {
     expect(results.some((r) => r.ruleId === 'runtime-error')).toBe(true);
   });
 });
+
+describe('diagnose — new enhanced rules', () => {
+  it('fires all-but-boundary-pass rule when right-boundary fails', () => {
+    const report = makeReport(BUGGY_STARTER);
+    const results = diagnose(report);
+    expect(results.some((r) => r.ruleId === 'all-but-boundary-pass')).toBe(true);
+  });
+
+  it('all-but-boundary-pass has inferred confidence', () => {
+    const report = makeReport(BUGGY_STARTER);
+    const results = diagnose(report);
+    const rule = results.find((r) => r.ruleId === 'all-but-boundary-pass');
+    expect(rule?.confidence).toBe('inferred');
+  });
+
+  it('does NOT fire all-but-boundary-pass when all tests pass', () => {
+    const report = makeReport(REFERENCE_CODE);
+    const results = diagnose(report);
+    expect(results.some((r) => r.ruleId === 'all-but-boundary-pass')).toBe(false);
+  });
+
+  it('fires singleton-boundary-pattern rule with buggy starter', () => {
+    const report = makeReport(BUGGY_STARTER);
+    const results = diagnose(report);
+    expect(results.some((r) => r.ruleId === 'singleton-boundary-pattern')).toBe(true);
+  });
+
+  it('does NOT fire empty-array-failed when reference code is used', () => {
+    const report = makeReport(REFERENCE_CODE);
+    const results = diagnose(report);
+    expect(results.some((r) => r.ruleId === 'empty-array-failed')).toBe(false);
+  });
+});

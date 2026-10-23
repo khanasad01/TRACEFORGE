@@ -98,6 +98,52 @@ const rules: DiagnosticRule[] = [
     evidenceRefs: (r) =>
       r.tests.filter((t) => t.status === 'failed').map((t) => t.testId),
   },
+  {
+    id: 'all-but-boundary-pass',
+    predicate: (r) => {
+      const failed = r.tests.filter((t) => t.status === 'failed');
+      const failedTargetAtRight = failed.some((t) => t.testId === 'target-at-right-boundary');
+      return r.status === 'failed' && failedTargetAtRight;
+    },
+    confidence: 'inferred',
+    statement:
+      'The right-boundary test case fails (expected index, got -1). This is the classic signature of a `while (low < high)` vs `while (low <= high)` off-by-one error — the final element is never examined when the search space narrows to a single element.',
+    evidenceRefs: (r) =>
+      r.tests.filter((t) => t.status === 'failed').map((t) => t.testId),
+  },
+  {
+    id: 'timeout',
+    predicate: (r) => r.status === 'timeout',
+    confidence: 'observed',
+    statement:
+      'Execution exceeded the maximum allowed steps. Check for infinite loops or recursive calls without proper termination conditions.',
+    evidenceRefs: () => [],
+  },
+  {
+    id: 'empty-array-failed',
+    predicate: (r) =>
+      r.tests.some(
+        (t) => t.testId === 'empty-input' && t.status === 'failed',
+      ),
+    confidence: 'observed',
+    statement:
+      'The empty-array test case failed. An empty array should return -1 immediately without entering the search loop.',
+    evidenceRefs: () => ['empty-input'],
+  },
+  {
+    id: 'singleton-boundary-pattern',
+    predicate: (r) =>
+      r.tests.some(
+        (t) => t.testId === 'singleton-found' && t.status === 'failed',
+      ) &&
+      r.tests.some(
+        (t) => t.testId === 'target-at-right-boundary' && t.status === 'failed',
+      ),
+    confidence: 'inferred',
+    statement:
+      'The singleton and right-boundary tests both fail, confirming the loop condition `while (low < high)` exits before examining the final remaining element. When the search narrows to one position (low === high), the condition is already false, so that element is skipped.',
+    evidenceRefs: () => ['singleton-found', 'target-at-right-boundary'],
+  },
 ];
 
 // ---------------------------------------------------------------------------
