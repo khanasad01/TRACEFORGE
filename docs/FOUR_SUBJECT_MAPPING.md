@@ -26,6 +26,7 @@ This document maps concepts to actual product behavior. A concept counts as “i
 | Boundary & Edge Cases | Empty array, singletons, left/right array bounds, missing targets, duplicates | `src/challenges/binarySearch/challenge.ts`, `src/__tests__/engine/regression.test.ts` | **Implemented** |
 | Operation Counting Comparison | Live comparison of operation steps: Binary Search ($O(\log N)$) vs. Linear Search ($O(N)$) | `src/engine/daaComparison.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 | Theoretical vs. Empirical Complexity | Displaying empirical step counts alongside theoretical Big-O notation | `src/App.tsx`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
+| Evidence Export | Download reproducible evidence report as JSON (run ID, code hash, test results, trace, diagnostics) | `src/App.tsx` | **Implemented** |
 | Dynamic Programming / Greedy | Additional syllabus topics | To be mapped from official course syllabus | **Planned** |
 
 ---
@@ -34,9 +35,10 @@ This document maps concepts to actual product behavior. A concept counts as “i
 
 | Concept | Implemented Feature | Evidence & Tests | Status |
 |---|---|---|---|
-| Deterministic Finite Automata (DFA) | Formal 5-tuple $(Q, \Sigma, \delta, q_0, F)$ simulation engine | `src/engine/tocDFA.ts`, `src/components/TOCAutomataLab.tsx` | **Implemented** |
-| Regular Language Acceptance | Accepts language $L = (0+1)^*01$ with 3 states; tests for accepted, rejected, and invalid inputs | `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
+| Deterministic Finite Automata (DFA) | Formal 5-tuple $(Q, \Sigma, \delta, q_0, F)$ simulation engine with three built-in automata: binary ending in "01", even number of 1s, divisible-by-3 | `src/engine/tocDFA.ts`, `src/components/TOCAutomataLab.tsx` | **Implemented** |
+| Regular Language Acceptance | Accepts languages for all three DFAs; tests for accepted, rejected, invalid alphabet, and empty string inputs | `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 | State Transition Trace | Cycle-by-cycle trace showing fromState, symbol, toState, remainingInput, and intermediate accept state | `src/components/TOCAutomataLab.tsx` | **Implemented** |
+| Multi-Automaton Exploration | DFA selector dropdown with definition viewer (states, alphabet, start, accept) and visual state diagram showing start/accept/final states | `src/components/TOCAutomataLab.tsx` | **Implemented** |
 | Pushdown Automata (PDA) | Stack-based language recognition ($a^n b^n$) | Deferred to future lab module | **Planned** |
 | Turing Machines | Tape and transition function | Deferred to future lab module | **Planned** |
 
@@ -47,7 +49,7 @@ This document maps concepts to actual product behavior. A concept counts as “i
 | Concept | Implemented Feature | Evidence & Tests | Status |
 |---|---|---|---|
 | Educational CPU Simulation | Program Counter (PC), 4 General Purpose Registers (R0–R3), Zero Flag (Z), 16-byte RAM | `src/engine/tinyCPU.ts`, `src/components/TinyCPULab.tsx` | **Implemented** |
-| Instruction Set Architecture (ISA) | `MOV`, `ADD`, `SUB`, `LOAD`, `STORE`, `JMP`, `JZ`, `HALT` | `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
+| Instruction Set Architecture (ISA) | `MOV`, `ADD`, `SUB`, `LOAD`, `STORE`, `JMP`, `JZ`, `HALT` with three built-in example programs (sum loop, factorial, Fibonacci) | `src/engine/tinyCPU.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 | Micro-architectural Cycle | Fetch → Decode → Execute cycle trace recording full machine state before and after each instruction | `src/engine/tinyCPU.ts` | **Implemented** |
 | Pipeline Hazard Tracking | Read-After-Write (RAW) data dependency hazard detection and stall advisory | `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 | Cache Hierarchy | Direct-mapped / associative cache hit/miss simulation | Deferred | **Planned** |
