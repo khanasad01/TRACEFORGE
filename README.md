@@ -41,7 +41,7 @@ npm ci
 # Start development server
 npm run dev
 
-# Run full test suite (85 automated tests across 9 test files)
+# Run full test suite (117 automated tests across 10 test files)
 npm test
 
 # Run ESLint (enforced at 0 warnings)
