@@ -1,0 +1,55 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.tip {
+  position: absolute;
+  z-index: 20;
+  max-width: 18rem;
+  width: max-content;
+  padding: var(--tf-space-2xs) var(--tf-space-xs);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border-deep);
+  border-radius: var(--tf-radius-sm);
+  background: var(--tf-color-panel-hover);
+  color: var(--tf-color-text-bright);
+  font-size: var(--tf-font-size-xs);
+  line-height: 1.4;
+  box-shadow: var(--tf-shadow-elevated);
+  pointer-events: none;
+  animation: tf-tooltip-in var(--tf-duration-sm) var(--tf-ease-standard);
+}
+
+/* Placement: static offsets only; the animation touches opacity alone. */
+.top {
+  bottom: calc(100% + var(--tf-space-2xs));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.bottom {
+  top: calc(100% + var(--tf-space-2xs));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.left {
+  right: calc(100% + var(--tf-space-2xs));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.right {
+  left: calc(100% + var(--tf-space-2xs));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@keyframes tf-tooltip-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -11,6 +11,7 @@ import {
   type SearchResult,
 } from '../engine/aiSearch';
 import styles from './AISearchLab.module.css';
+import { Tooltip } from './Tooltip';
 
 const ALGORITHMS: { value: AlgorithmType; label: string; description: string }[] = [
   { value: 'A*', label: 'A*', description: 'Informed search — optimal with admissible heuristic' },
@@ -69,9 +70,11 @@ export function AISearchLab() {
               ))}
             </select>
           </div>
-          <button className={styles.runBtn} onClick={handleRunSearch} aria-label="Run search algorithm">
-            ▶ Run {algorithm}
-          </button>
+          <Tooltip label={ALGORITHMS.find((a) => a.value === algorithm)?.description ?? ''} placement="top">
+            <button className={styles.runBtn} onClick={handleRunSearch} aria-label="Run search algorithm">
+              ▶ Run {algorithm}
+            </button>
+          </Tooltip>
         </div>
       </div>
 

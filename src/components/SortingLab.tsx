@@ -6,6 +6,7 @@ import {
   type SortingTraceEvent,
 } from '../engine/sorting';
 import styles from './SortingLab.module.css';
+import { Tooltip } from './Tooltip';
 
 const PRESETS: { name: string; value: string }[] = [
   { name: 'Custom input', value: '' },
@@ -143,8 +144,12 @@ export function SortingLab() {
             />
           </label>
           <div className={styles.buttons}>
-            <button className={styles.runButton} onClick={handleRun}>▶ Run sort</button>
-            <button className={styles.resetButton} onClick={handleReset}>↺ Reset</button>
+            <Tooltip label="Run the selected sorting algorithm" placement="top">
+              <button className={styles.runButton} onClick={handleRun}>▶ Run sort</button>
+            </Tooltip>
+            <Tooltip label="Reset the array and clear trace" placement="top">
+              <button className={styles.resetButton} onClick={handleReset}>↺ Reset</button>
+            </Tooltip>
           </div>
         </div>
         {error && <p className={styles.error} role="alert">{error}</p>}

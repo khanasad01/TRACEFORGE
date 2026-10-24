@@ -6,6 +6,7 @@ import {
   type GraphTraversalResult,
 } from '../engine/graphTraversal';
 import styles from './GraphTraversalLab.module.css';
+import { Tooltip } from './Tooltip';
 
 const EXAMPLE_GRAPH = `A: B, C
 B: D, E
@@ -91,8 +92,12 @@ export function GraphTraversalLab() {
             </label>
           </div>
           <div className={styles.buttons}>
-            <button className={styles.runButton} onClick={handleRun}>▶ Run traversal</button>
-            <button className={styles.resetButton} onClick={handleReset}>↺ Reset</button>
+            <Tooltip label="Run the selected graph traversal algorithm" placement="top">
+              <button className={styles.runButton} onClick={handleRun}>▶ Run traversal</button>
+            </Tooltip>
+            <Tooltip label="Reset the graph and clear results" placement="top">
+              <button className={styles.resetButton} onClick={handleReset}>↺ Reset</button>
+            </Tooltip>
           </div>
           <p className={styles.note}>
             Edges are undirected; neighbor order follows the adjacency list. Traversal visits
