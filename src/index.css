@@ -1,3 +1,5 @@
+@import './styles/tokens.css';
+
 :root {
   color-scheme: dark;
 }
@@ -8,10 +10,32 @@
   padding: 0;
 }
 
+html {
+  font-size: 16px;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  background: #020817;
-  color: #e2e8f0;
+  font-family: var(--tf-font-sans);
+  background: var(--tf-color-canvas);
+  color: var(--tf-color-text-primary);
+  line-height: var(--tf-font-lineheight-base);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Global prefers-reduced-motion accessibility safeguard */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

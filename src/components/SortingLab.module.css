@@ -1,0 +1,274 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-space-md);
+}
+
+.header,
+.card {
+  min-width: 0;
+  padding: var(--tf-space-lg);
+  background: var(--tf-color-panel);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border);
+  border-radius: var(--tf-radius-md);
+  box-shadow: var(--tf-shadow-sm);
+}
+
+.title {
+  margin: 0 0 var(--tf-space-2xs);
+  color: var(--tf-color-text-bright);
+  font-size: var(--tf-font-size-xl);
+  font-weight: var(--tf-font-weight-bold);
+  letter-spacing: -0.01em;
+}
+
+.description,
+.note {
+  margin: 0;
+  color: var(--tf-color-text-secondary);
+  font-size: var(--tf-font-size-sm);
+  line-height: var(--tf-font-lineheight-base);
+}
+
+.heading {
+  margin: 0 0 var(--tf-space-sm);
+  color: var(--tf-color-text-heading);
+  font-size: var(--tf-font-size-md);
+  font-weight: var(--tf-font-weight-semibold);
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--tf-space-sm);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-space-3xs);
+  color: var(--tf-color-text-primary);
+  font-size: var(--tf-font-size-xs);
+}
+
+.field input,
+.field select {
+  width: 100%;
+  min-width: 0;
+  padding: var(--tf-space-2xs) var(--tf-space-xs);
+  color: var(--tf-color-text-bright);
+  background: var(--tf-color-canvas);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border-deep);
+  border-radius: var(--tf-radius-sm);
+  font: inherit;
+  font-size: var(--tf-font-size-sm);
+  transition: border-color var(--tf-duration-sm) var(--tf-ease-standard);
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--tf-color-accent);
+  box-shadow: 0 0 0 1px var(--tf-color-accent);
+}
+
+.buttons {
+  display: flex;
+  align-items: end;
+  gap: var(--tf-space-xs);
+}
+
+.runButton,
+.resetButton {
+  min-height: 2.25rem;
+  padding: var(--tf-space-2xs) var(--tf-space-md);
+  border: 0;
+  border-radius: var(--tf-radius-sm);
+  font-size: var(--tf-font-size-sm);
+  font-weight: var(--tf-font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--tf-duration-sm) var(--tf-ease-standard);
+  user-select: none;
+}
+
+.runButton {
+  background: var(--tf-color-accent);
+  color: var(--tf-color-text-white);
+  box-shadow: var(--tf-shadow-sm);
+}
+
+.runButton:hover:not(:disabled) {
+  background: var(--tf-color-accent-hover);
+}
+
+.runButton:active:not(:disabled) {
+  background: var(--tf-color-accent-active);
+  transform: scale(0.98);
+}
+
+.runButton:focus-visible {
+  outline: none;
+  box-shadow: var(--tf-focus-ring);
+}
+
+.resetButton {
+  background: transparent;
+  color: var(--tf-color-text-secondary);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border-deep);
+}
+
+.resetButton:hover:not(:disabled) {
+  color: var(--tf-color-text-bright);
+  background: var(--tf-color-surface-hover);
+  border-color: var(--tf-color-border-strong);
+}
+
+.resetButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.resetButton:focus-visible {
+  outline: none;
+  box-shadow: var(--tf-focus-ring);
+}
+
+.error,
+.complete {
+  margin: var(--tf-space-sm) 0 0;
+  padding: var(--tf-space-xs) var(--tf-space-sm);
+  border-radius: var(--tf-radius-sm);
+  font-size: var(--tf-font-size-sm);
+  box-shadow: var(--tf-shadow-sm);
+}
+
+.error {
+  color: var(--tf-color-error-fg);
+  background: var(--tf-color-error-bg);
+  border: var(--tf-line-width-thin) solid var(--tf-color-error-border);
+}
+
+.complete {
+  color: var(--tf-color-success-fg);
+  background: var(--tf-color-success-bg);
+  border: var(--tf-line-width-thin) solid var(--tf-color-success-border);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--tf-space-md);
+}
+
+.arrayRow {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: var(--tf-space-sm);
+  align-items: start;
+  margin: var(--tf-space-2xs) 0;
+  color: var(--tf-color-text-secondary);
+  font-size: var(--tf-font-size-sm);
+}
+
+.arrayRow code,
+.traceTable code {
+  color: var(--tf-color-info);
+  font-family: var(--tf-font-mono);
+  overflow-wrap: anywhere;
+}
+
+.metrics,
+.complexities {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--tf-space-xs);
+  margin: 0;
+}
+
+.metrics div,
+.complexities div {
+  padding: var(--tf-space-xs);
+  background: var(--tf-color-canvas);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border);
+  border-radius: var(--tf-radius-sm);
+}
+
+.metrics dt,
+.complexities dt {
+  color: var(--tf-color-text-secondary);
+  font-size: var(--tf-font-size-2xs);
+}
+
+.metrics dd,
+.complexities dd {
+  margin: var(--tf-space-3xs) 0 0;
+  color: var(--tf-color-text-bright);
+  font-size: var(--tf-font-size-md);
+  font-weight: var(--tf-font-weight-bold);
+  font-family: var(--tf-font-mono);
+}
+
+.note {
+  margin-top: var(--tf-space-xs);
+}
+
+.traceWrap {
+  max-width: 100%;
+  max-height: 520px;
+  overflow: auto;
+  border: var(--tf-line-width-thin) solid var(--tf-color-border);
+  border-radius: var(--tf-radius-md);
+  box-shadow: var(--tf-shadow-sm);
+}
+
+.traceTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--tf-font-size-xs);
+  font-family: var(--tf-font-mono);
+}
+
+.traceTable th,
+.traceTable td {
+  padding: var(--tf-space-2xs) var(--tf-space-xs);
+  border-bottom: var(--tf-line-width-thin) solid var(--tf-color-border);
+  vertical-align: top;
+}
+
+.traceTable th {
+  position: sticky;
+  top: 0;
+  color: var(--tf-color-text-secondary);
+  background: var(--tf-color-panel);
+  font-weight: var(--tf-font-weight-semibold);
+  font-size: var(--tf-font-size-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: var(--tf-line-width-thin) solid var(--tf-color-border-deep);
+}
+
+.traceTable td {
+  background: var(--tf-color-canvas);
+  color: var(--tf-color-text-primary);
+}
+
+@media (max-width: 760px) {
+  .controls,
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .header,
+  .card {
+    padding: var(--tf-space-md);
+  }
+
+  .buttons > button {
+    flex: 1;
+  }
+
+  .metrics,
+  .complexities {
+    grid-template-columns: 1fr;
+  }
+}

@@ -284,6 +284,119 @@ describe('COA — TinyCPU Simulator', () => {
     expect(instructions.length).toBeGreaterThan(0);
     expect(instructions.some((i) => i.opcode === 'HALT')).toBe(true);
   });
+
+  describe('JMP and JZ branching correctness', () => {
+    it('forward JMP skips instructions without side effects, matching PC trace and note', () => {
+      const code = `
+        MOV R0, 10
+        JMP 3
+        MOV R0, 99
+        OUT R0
+        HALT
+      `;
+      const instructions = assembleProgram(code);
+      const result = runTinyCPU(instructions);
+
+      expect(result.haltedNormally).toBe(true);
+      expect(result.finalState.registers.r0).toBe(10);
+      expect(result.outputValues).toEqual([10]);
+
+      const executedPCs = result.trace.map((t) => t.pc);
+      expect(executedPCs).toEqual([0, 1, 3, 4]);
+      expect(executedPCs).not.toContain(2);
+
+      const jmpTrace = result.trace.find((t) => t.instruction === 'JMP 3');
+      expect(jmpTrace).toBeDefined();
+      expect(jmpTrace?.pc).toBe(1);
+      expect(jmpTrace?.stateAfter.pc).toBe(3);
+      expect(jmpTrace?.note).toBe('Unconditional Jump to line 3');
+    });
+
+    it('JZ jumps when zero flag is set, skips intervening instructions without side effects', () => {
+      const code = `
+        MOV R0, 5
+        SUB R0, 5
+        JZ 4
+        MOV R1, 42
+        OUT R0
+        HALT
+      `;
+      const instructions = assembleProgram(code);
+      const result = runTinyCPU(instructions);
+
+      expect(result.haltedNormally).toBe(true);
+      expect(result.finalState.zeroFlag).toBe(true);
+      expect(result.finalState.registers.r0).toBe(0);
+      expect(result.finalState.registers.r1).toBe(0);
+      expect(result.outputValues).toEqual([0]);
+
+      const executedPCs = result.trace.map((t) => t.pc);
+      expect(executedPCs).toEqual([0, 1, 2, 4, 5]);
+      expect(executedPCs).not.toContain(3);
+
+      const jzTrace = result.trace.find((t) => t.instruction === 'JZ 4');
+      expect(jzTrace).toBeDefined();
+      expect(jzTrace?.pc).toBe(2);
+      expect(jzTrace?.stateBefore.zeroFlag).toBe(true);
+      expect(jzTrace?.stateAfter.pc).toBe(4);
+      expect(jzTrace?.note).toBe('Zero flag is 1 -> Branch taken to line 4');
+    });
+
+    it('JZ does not jump when zero flag is unset, proceeding to next instruction', () => {
+      const code = `
+        MOV R0, 5
+        SUB R0, 2
+        JZ 5
+        MOV R1, 99
+        OUT R1
+        HALT
+      `;
+      const instructions = assembleProgram(code);
+      const result = runTinyCPU(instructions);
+
+      expect(result.haltedNormally).toBe(true);
+      expect(result.finalState.zeroFlag).toBe(false);
+      expect(result.finalState.registers.r0).toBe(3);
+      expect(result.finalState.registers.r1).toBe(99);
+      expect(result.outputValues).toEqual([99]);
+
+      const executedPCs = result.trace.map((t) => t.pc);
+      expect(executedPCs).toEqual([0, 1, 2, 3, 4, 5]);
+
+      const jzTrace = result.trace.find((t) => t.instruction === 'JZ 5');
+      expect(jzTrace).toBeDefined();
+      expect(jzTrace?.pc).toBe(2);
+      expect(jzTrace?.stateBefore.zeroFlag).toBe(false);
+      expect(jzTrace?.stateAfter.pc).toBe(3);
+      expect(jzTrace?.note).toBe('Zero flag is 0 -> Branch not taken, continuing');
+    });
+
+    it('jump destinations use zero-based instruction indices regardless of comments or blank lines', () => {
+      const code = `
+        ; Leading comment line 1
+        ; Leading comment line 2
+
+        MOV R0, 1
+        JMP 3
+        MOV R0, 99
+        MOV R1, 7
+        HALT
+      `;
+      const instructions = assembleProgram(code);
+      expect(instructions.map((i) => i.raw)).toEqual([
+        'MOV R0, 1',
+        'JMP 3',
+        'MOV R0, 99',
+        'MOV R1, 7',
+        'HALT',
+      ]);
+
+      const result = runTinyCPU(instructions);
+      expect(result.finalState.registers.r0).toBe(1);
+      expect(result.finalState.registers.r1).toBe(7);
+      expect(result.trace.map((t) => t.pc)).toEqual([0, 1, 3, 4]);
+    });
+  });
 });
 
 describe('DAA — Complexity and Operation Counting', () => {

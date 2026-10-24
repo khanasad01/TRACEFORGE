@@ -15,10 +15,11 @@ This document maps concepts to actual product behavior. A concept counts as “i
 | UCS (Uniform-Cost Search) | Lowest-cost-first expansion with priority queue; optimal for weighted graphs | `src/engine/aiSearch.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 | Greedy Best-First Search | Heuristic-only $h(n)$ priority queue; fast but not guaranteed optimal | `src/engine/aiSearch.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 | Knowledge Representation & Forward Chaining | Rule-based diagnostic forward chaining over evidence report to generate hints | `src/diagnostics/engine.ts`, `src/__tests__/diagnostics/engine.test.ts` | **Implemented** |
+| Knowledge Representation & Backward Chaining | Goal-directed proof search with rule/fact trace; unsupported goals and cycles terminate safely | `src/engine/inference.ts`, `src/components/KnowledgeLab.tsx`, `src/__tests__/engine/inference.test.ts` | **Implemented** |
 | Minimax with Alpha-Beta Pruning | Optimal game-playing algorithm for perfect-information two-player games (Tic-Tac-Toe); alpha-beta pruning eliminates subtrees that cannot affect the decision | `src/engine/aiSearch.ts`, `src/components/TicTacToeLab.tsx`, `src/__tests__/engine/fourSubjects.test.ts`, `src/__tests__/ui/ticTacToe.test.tsx` | **Implemented** |
-| Regression/Neural Models | Held-out training/evaluation sets | Deferred until specific syllabus dataset requirements are provided | **Deferred** |
+| Interpretable Classification | Two-feature logistic regression trained by batch gradient descent; per-epoch loss/weight evidence; deterministic stratified holdout with confusion counts, accuracy, precision, recall, and F1; interactive profile predictions | `src/engine/logisticRegression.ts`, `src/components/InterpretableMLLab.tsx`, `src/__tests__/engine/logisticRegression.test.ts` | **Implemented (synthetic dataset)** |
 
-*Note: The rule-based diagnostic engine represents classical AI knowledge representation and forward chaining, not statistical machine learning.*
+*Note: The rule-based diagnostic engine represents classical AI knowledge representation, not statistical machine learning. The classifier's small synthetic dataset is instructional and does not validate real student outcomes.*
 
 ---
 
@@ -27,6 +28,8 @@ This document maps concepts to actual product behavior. A concept counts as “i
 | Concept | Implemented Feature | Evidence & Tests | Status |
 |---|---|---|---|
 | Divide & Conquer Correctness | Buggy starter vs. fixed reference implementation on 9 deterministic test cases | `src/engine/binarySearch.ts`, `src/__tests__/engine/binarySearch.test.ts` | **Implemented** |
+| Sorting Algorithms | Bubble, Insertion, and Merge Sort with algorithm-generated comparison, swap/write, and merge traces | `src/engine/sorting.ts`, `src/__tests__/engine/sorting.test.ts` | **Implemented** |
+| Graph Traversal | Deterministic BFS/DFS over an editable undirected adjacency list with traversal-order, frontier, discovery, and visited evidence | `src/engine/graphTraversal.ts`, `src/components/GraphTraversalLab.tsx`, `src/__tests__/engine/graphTraversal.test.ts` | **Implemented** |
 | Boundary & Edge Cases | Empty array, singletons, left/right array bounds, missing targets, duplicates | `src/challenges/binarySearch/challenge.ts`, `src/__tests__/engine/regression.test.ts` | **Implemented** |
 | Operation Counting Comparison | Live comparison of operation steps: Binary Search ($O(\log N)$) vs. Linear Search ($O(N)$) | `src/engine/daaComparison.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 | Theoretical vs. Empirical Complexity | Displaying empirical step counts alongside theoretical Big-O notation | `src/App.tsx`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
@@ -43,8 +46,11 @@ This document maps concepts to actual product behavior. A concept counts as “i
 | Regular Language Acceptance | Accepts languages for all three DFAs; tests for accepted, rejected, invalid alphabet, and empty string inputs | `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 | State Transition Trace | Cycle-by-cycle trace showing fromState, symbol, toState, remainingInput, and intermediate accept state | `src/components/TOCAutomataLab.tsx` | **Implemented** |
 | Multi-Automaton Exploration | DFA selector dropdown with definition viewer (states, alphabet, start, accept) and visual state diagram showing start/accept/final states | `src/components/TOCAutomataLab.tsx` | **Implemented** |
-| Pushdown Automata (PDA) | Stack-based language recognition ($a^n b^n$) | Deferred to future lab module | **Planned** |
-| Turing Machines | Tape and transition function | Deferred to future lab module | **Planned** |
+| Nondeterministic Finite Automata | Thompson epsilon-NFA execution using epsilon-closure state sets and a per-input-symbol trace | `src/engine/tocNFA.ts`, `src/components/TOCNFALab.tsx` | **Implemented** |
+| Regular Expression Compilation | Documented subset of literals, concatenation, union, Kleene star, grouping, and epsilon compiled to an NFA | `src/engine/tocNFA.ts`, `src/__tests__/engine/tocNFA.test.ts` | **Implemented (documented subset)** |
+| Context-Free Grammar Parsing | CYK recognition for curated Chomsky Normal Form grammar for $a^n b^n$, with parse tree and chart-evaluation evidence | `src/engine/tocCFG.ts`, `src/components/TOCCFGLab.tsx` | **Implemented (curated CNF only)** |
+| Pushdown Automata | Bounded nondeterministic PDA configuration search with explicit stack traces; built-in machine recognizes $a^n b^n$ | `src/engine/tocPDA.ts`, `src/components/TOCPDALab.tsx` | **Implemented (one curated PDA)** |
+| Turing Machines | Bounded deterministic single-tape machine with read/write/head-move trace; built-in unary increment experiment | `src/engine/tocTM.ts`, `src/components/TOCTuringMachineLab.tsx` | **Implemented (one simplified machine)** |
 
 ---
 
@@ -53,9 +59,10 @@ This document maps concepts to actual product behavior. A concept counts as “i
 | Concept | Implemented Feature | Evidence & Tests | Status |
 |---|---|---|---|
 | Educational CPU Simulation | Program Counter (PC), 4 General Purpose Registers (R0–R3), Zero Flag (Z), 16-byte RAM | `src/engine/tinyCPU.ts`, `src/components/TinyCPULab.tsx` | **Implemented** |
-| Instruction Set Architecture (ISA) | `MOV`, `ADD`, `SUB`, `LOAD`, `STORE`, `JMP`, `JZ`, `HALT` with three built-in example programs (sum loop, factorial, Fibonacci) | `src/engine/tinyCPU.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
-| Micro-architectural Cycle | Fetch → Decode → Execute cycle trace recording full machine state before and after each instruction | `src/engine/tinyCPU.ts` | **Implemented** |
-| Pipeline Hazard Tracking | Read-After-Write (RAW) data dependency hazard detection and stall advisory | `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
+| Instruction Set Architecture (ISA) | `MOV`, `ADD`, `SUB`, `LOAD`, `STORE`, `JMP`, `JZ`, `IN`, `OUT`, `HALT`; input underflow is an explicit runtime error | `src/engine/tinyCPU.ts`, `src/__tests__/engine/tinyCPUIO.test.ts` | **Implemented** |
+| Sequential Instruction Trace | Per-instruction state changes, execution effects, and output log | `src/engine/tinyCPU.ts`, `src/components/TinyCPULab.tsx` | **Implemented** |
+| Five-Stage Pipeline Timing | IF/ID/EX/MEM/WB occupancy each cycle; RAW stalls and bubbles without forwarding; WB is visible to ID in the same cycle | `src/engine/tinyCPUPipeline.ts`, `src/__tests__/engine/tinyCPUPipeline.test.ts`, `src/components/TinyCPUPipelineLab.tsx` | **Implemented (timing model)** |
+| Interactive I/O Experiment | Editable byte input stream and program, actual IN/OUT execution, output log, and per-step trace | `src/components/TinyCPUIOLab.tsx`, `src/__tests__/ui/tinyCPUIOLab.test.tsx` | **Implemented** |
 | Cache Hierarchy | Direct-mapped and set-associative cache simulation with LRU/FIFO replacement policies, configurable size/block/associativity, hit-miss tracking with detailed trace, and thrashing pattern demonstration | `src/engine/cacheSim.ts`, `src/__tests__/engine/fourSubjects.test.ts` | **Implemented** |
 
-*Note: TinyCPU is an educational simulator for conceptual understanding, not a cycle-accurate commercial hardware model.*
+*Note: The pipeline timing model schedules the listed instruction stream and does not dynamically execute branches or model forwarding or a complete cycle-accurate processor.*

@@ -65,7 +65,7 @@ describe('TRACEFORGE Regression Suite', () => {
     expect(trace.every((e) => e.evidenceRef === 'target-in-middle')).toBe(true);
   });
 
-  it('5. Infinite loops terminate with an explicit failure/error status and limit note', () => {
+  it('5. Infinite loops terminate with an explicit timeout status and limit trace', () => {
     const infiniteCode = `
       function binarySearch(array, target) {
         let low = 0;
@@ -80,8 +80,10 @@ describe('TRACEFORGE Regression Suite', () => {
     const tc = binarySearchChallenge.testCases.find((t) => t.id === 'target-in-middle')!;
     const { testResult, trace } = runTestCase(tc, infiniteCode);
 
-    expect(testResult.status).toBe('error');
+    expect(testResult.status).toBe('timeout');
+    expect(testResult.actual).toBeNull();
     expect(testResult.message).toContain('Execution limit exceeded');
+    expect(trace.some((t) => t.event === 'execution_limit')).toBe(true);
     expect(trace.some((t) => t.note?.includes('Execution limit exceeded'))).toBe(true);
   });
 

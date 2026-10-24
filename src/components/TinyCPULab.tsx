@@ -48,8 +48,9 @@ export function TinyCPULab() {
         <div>
           <h2 className={styles.title}>Computer Organization &amp; Architecture (COA) — TinyCPU Simulator</h2>
           <p className={styles.desc}>
-            An educational 8-bit instruction set computer simulation demonstrating the
-            <strong> Fetch → Decode → Execute</strong> cycle, register file updates, zero-flag branching, and pipeline hazards.
+            A sequential educational 8-bit instruction-set simulator demonstrating register
+            updates, zero-flag branching, and dependency warnings. Use the Pipeline &amp; Hazards
+            tab for the separate cycle-by-cycle five-stage timing model.
           </p>
         </div>
 
@@ -95,7 +96,7 @@ export function TinyCPULab() {
 
           <div className={styles.isaCheatSheet}>
             <strong>Supported ISA:</strong>
-            <code>MOV Rd, val/Rs</code> · <code>ADD Rd, Rs</code> · <code>SUB Rd, Rs</code> · <code>LOAD Rd, [addr]</code> · <code>STORE Rd, [addr]</code> · <code>JMP addr</code> · <code>JZ addr</code> · <code>HALT</code>
+            <code>MOV Rd, val/Rs</code> · <code>ADD Rd, Rs</code> · <code>SUB Rd, Rs</code> · <code>LOAD Rd, [addr]</code> · <code>STORE Rd, [addr]</code> · <code>IN Rd</code> · <code>OUT Rs</code> · <code>JMP addr</code> · <code>JZ addr</code> · <code>HALT</code>
           </div>
         </div>
 
@@ -140,7 +141,7 @@ export function TinyCPULab() {
       {/* Cycle by Cycle Trace */}
       {result && result.trace.length > 0 && (
         <div className={styles.card}>
-          <h3 className={styles.cardHeading}>Instruction Cycle Trace &amp; Pipeline Hazards</h3>
+          <h3 className={styles.cardHeading}>Sequential Instruction Trace &amp; Dependency Warnings</h3>
           <div className={styles.tableWrap}>
             <table className={styles.table}>
               <thead>

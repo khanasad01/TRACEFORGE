@@ -16,7 +16,7 @@
  */
 
 import type { TestCase, TestResult, TraceEvent } from '../types/domain';
-import { interpretBinarySearchWithTrace } from './safeInterpreter';
+import { ExecutionLimitError, interpretBinarySearchWithTrace } from './safeInterpreter';
 
 // ---------------------------------------------------------------------------
 // Trace-instrumented reference implementations
@@ -181,7 +181,7 @@ export function runTestCase(
   testCase: TestCase,
   sourceCode: string,
 ): { testResult: TestResult; trace: TraceEvent[] } {
-  let actual: number;
+  let actual: unknown = null;
   let status: TestResult['status'];
   let message: string | undefined;
   let trace: TraceEvent[] = [];
@@ -203,16 +203,18 @@ export function runTestCase(
       message = `Expected index ${testCase.expected} but got ${actual}.`;
     }
   } catch (err) {
-    actual = -999;
-    status = 'error';
+    const timedOut = err instanceof ExecutionLimitError;
+    status = timedOut ? 'timeout' : 'error';
     message = err instanceof Error ? err.message : String(err);
     trace = [
       {
         step: 1,
-        event: 'init',
+        event: timedOut ? 'execution_limit' : 'init',
         variables: { error: message },
         evidenceRef: testCase.id,
-        note: `Execution halted with error: ${message}`,
+        note: timedOut
+          ? `Execution stopped after reaching the step limit: ${message}`
+          : `Execution halted with error: ${message}`,
       },
     ];
   }

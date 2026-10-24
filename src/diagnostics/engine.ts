@@ -116,8 +116,9 @@ const rules: DiagnosticRule[] = [
     predicate: (r) => r.status === 'timeout',
     confidence: 'observed',
     statement:
-      'Execution exceeded the maximum allowed steps. Check for infinite loops or recursive calls without proper termination conditions.',
-    evidenceRefs: () => [],
+      'Execution reached the interpreter step limit. This is a bounded step budget, not a wall-clock timeout.',
+    evidenceRefs: (r) =>
+      r.tests.filter((t) => t.status === 'timeout').map((t) => t.testId),
   },
   {
     id: 'empty-array-failed',

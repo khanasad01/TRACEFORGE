@@ -10,11 +10,13 @@
 - **Gate:** clean install and production build pass.
 
 ## Phase 1 — Binary Search vertical slice (2–4 days)
-- [ ] Define challenge metadata, buggy starter, correct reference and named tests.
-- [ ] Add deterministic test harness and normalized result model.
-- [ ] Render editor, test cases, expected/actual values and status.
-- [ ] Add regression rerun after edit.
-- **Gate:** seeded bug fails at least one named case; reference solution passes all declared tests.
+- [x] Define challenge metadata, buggy starter, correct reference and named tests.
+- [x] Add deterministic test harness and normalized result model.
+- [x] Render editor, test cases, expected/actual values and status.
+- [x] Add regression rerun after edit.
+- **Gate:** seeded bug fails at least one named case; reference solution passes all declared tests. **Complete.**
+
+Execution-step exhaustion is reported as a timeout state. It is not a wall-clock watchdog; worker termination is deferred to Phase 3.
 
 ## Phase 2 — Evidence and coaching (2–4 days)
 - [ ] Add versioned evidence envelope and bounded trace events.
@@ -31,25 +33,26 @@
 - **Gate:** timeout does not freeze the UI; document that this is not a hardened server sandbox.
 
 ## Phase 4 — DAA lab (3–5 days)
-- [ ] Add linear search, binary search and 1–2 sorting algorithms.
-- [ ] Count operations using explicit counting rules.
-- [ ] Show complexity as theoretical analysis, separate from measured counts.
-- [ ] Test empty/singleton/duplicate/worst-case inputs.
-- **Gate:** expected outputs and counters match hand-checked fixtures.
+- [x] Add linear search, binary search, three sorting algorithms, and BFS/DFS graph traversal.
+- [x] Count operations with documented observation rules for sorting.
+- [x] Show complexity as theoretical analysis, separate from measured counts.
+- [x] Test sorting edge cases and graph cycles, disconnected vertices, and frontier evidence.
+- **Gate:** expected outputs and traces match fixtures. **Complete for the implemented educational scope; remaining algorithms depend on syllabus definition.**
 
 ## Phase 5 — TOC lab (3–6 days)
-- [ ] Implement FSM state transition runner and acceptance/rejection traces.
-- [ ] Add regex examples and clear distinction between regex syntax and FSM execution.
-- [ ] Add curated CFG parsing/parse tree (consider Lark in a Python service or another compatible parser).
-- [ ] Defer PDA/Turing-machine work until scope and time are confirmed.
-- **Gate:** known accepted/rejected strings and grammar fixtures pass.
+- [x] Implement DFA state transition runner and acceptance/rejection traces.
+- [x] Add a documented regex subset compiled to epsilon-NFA, distinct from DFA simulation.
+- [x] Add curated CNF parsing/parse tree using CYK.
+- [x] Add bounded PDA and simplified single-tape Turing Machine examples.
+- **Gate:** DFA, NFA, CFG, PDA, and Turing Machine fixtures pass. **Complete for the documented educational scope; arbitrary grammar/machine editors remain out of scope.**
 
 ## Phase 6 — TinyCPU (4–7 days)
-- [ ] Specify educational instruction set, registers, memory and instruction semantics.
-- [ ] Implement single-step interpreter and trace output.
-- [ ] Add pipeline visualization as a separate model with documented assumptions.
-- [ ] Test arithmetic, branch, memory bounds, stalls and hazard cases.
-- **Gate:** golden traces are deterministic; never imply cycle-accurate real CPU simulation.
+- [x] Specify educational instruction set, registers, memory and instruction semantics.
+- [x] Implement sequential interpreter and per-instruction trace output.
+- [x] Add a separate IF/ID/EX/MEM/WB timing model with no-forwarding RAW stalls.
+- [x] Add interactive byte input/output instructions and trace.
+- [x] Test arithmetic, branches, memory, stalls, input/output, and hazard cases.
+- **Gate:** deterministic trace tests pass; pipeline limitations are documented. **Complete for the implemented educational scope.**
 
 ## Phase 7 — Student pilot (2–3 days)
 - [ ] Ask 5–8 students to use the MVP without coaching.

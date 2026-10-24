@@ -12,6 +12,7 @@ const STATUS_LABEL: Record<TestResult['status'], string> = {
   passed: '✓ Passed',
   failed: '✗ Failed',
   error: '⚠ Error',
+  timeout: '⏱ Limit reached',
   skipped: '— Skipped',
 };
 
@@ -19,6 +20,7 @@ const STATUS_CLASS: Record<TestResult['status'], string> = {
   passed: styles.passed,
   failed: styles.failed,
   error: styles.error,
+  timeout: styles.error,
   skipped: styles.skipped,
 };
 
@@ -55,7 +57,7 @@ export function TestResultPanel({ testCases, results, activeTestId, onSelectTest
                 {result ? STATUS_LABEL[result.status] : '· Not run'}
               </span>
               <span className={styles.testName}>{tc.description}</span>
-              {result && result.status !== 'passed' && (
+              {result?.status === 'failed' && (
                 <span className={styles.values}>
                   Expected <code>{String(result.expected)}</code>, got{' '}
                   <code>{String(result.actual)}</code>

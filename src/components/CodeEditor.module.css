@@ -1,48 +1,55 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  border: 1px solid #1e293b;
-  border-radius: 8px;
+  border: var(--tf-line-width-thin) solid var(--tf-color-border);
+  border-radius: var(--tf-radius-md);
   overflow: hidden;
-  background: #0d1117;
+  background: var(--tf-color-code-bg);
+  box-shadow: var(--tf-shadow-sm);
+  transition: border-color var(--tf-duration-sm) var(--tf-ease-standard);
+}
+
+.wrapper:focus-within {
+  border-color: var(--tf-color-accent);
 }
 
 .header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.4rem 0.75rem;
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  gap: var(--tf-space-sm);
+  padding: var(--tf-space-2xs) var(--tf-space-sm);
+  background: var(--tf-color-panel);
+  border-bottom: var(--tf-line-width-thin) solid var(--tf-color-border);
 }
 
 .lang {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #64748b;
+  font-size: var(--tf-font-size-2xs);
+  font-weight: var(--tf-font-weight-bold);
+  color: var(--tf-color-accent);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-family: monospace;
+  letter-spacing: 0.08em;
+  font-family: var(--tf-font-mono);
 }
 
 .note {
-  font-size: 0.72rem;
-  color: #475569;
+  font-size: var(--tf-font-size-2xs);
+  color: var(--tf-color-text-tertiary);
 }
 
 .editor {
-  font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Consolas', monospace;
-  font-size: 0.82rem;
-  line-height: 1.6;
-  color: #e2e8f0;
-  background: #0d1117;
+  font-family: var(--tf-font-mono);
+  font-size: var(--tf-font-size-sm);
+  line-height: var(--tf-font-lineheight-base);
+  color: var(--tf-color-text-bright);
+  background: var(--tf-color-code-bg);
   border: none;
   resize: vertical;
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: var(--tf-space-sm) var(--tf-space-md);
   box-sizing: border-box;
   outline: none;
   tab-size: 2;
+  transition: box-shadow var(--tf-duration-sm) var(--tf-ease-standard);
 }
 
 .editor:disabled {
@@ -51,5 +58,5 @@
 }
 
 .editor:focus {
-  box-shadow: inset 0 0 0 2px #3b82f6;
+  box-shadow: inset 0 0 0 1px var(--tf-color-accent);
 }

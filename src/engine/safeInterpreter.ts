@@ -28,6 +28,13 @@ export interface EvaluatedStepResult {
   timeout?: boolean;
 }
 
+export class ExecutionLimitError extends Error {
+  constructor(maxSteps: number) {
+    super(`Execution limit exceeded: loop or steps exceeded ${maxSteps} limit.`);
+    this.name = 'ExecutionLimitError';
+  }
+}
+
 /**
  * Validate syntax and structure using Acorn parser.
  * Rejects unsupported syntax or non-conforming functions.
@@ -239,7 +246,7 @@ export function interpretBinarySearchWithTrace(
       if (returned) return;
       step++;
       if (step > maxSteps) {
-        throw new Error(`Execution limit exceeded: loop or steps exceeded ${maxSteps} limit.`);
+        throw new ExecutionLimitError(maxSteps);
       }
 
       if (stmt.type === 'VariableDeclaration') {
@@ -270,7 +277,7 @@ export function interpretBinarySearchWithTrace(
         while (!returned) {
           step++;
           if (step > maxSteps) {
-            throw new Error(`Execution limit exceeded: loop or steps exceeded ${maxSteps} limit.`);
+            throw new ExecutionLimitError(maxSteps);
           }
 
           const cond = Boolean(evalExpr(stmt.test));
@@ -292,7 +299,7 @@ export function interpretBinarySearchWithTrace(
               if (returned) break;
               step++;
               if (step > maxSteps) {
-                throw new Error(`Execution limit exceeded: loop or steps exceeded ${maxSteps} limit.`);
+                throw new ExecutionLimitError(maxSteps);
               }
 
               if (bodyStmt.type === 'VariableDeclaration') {

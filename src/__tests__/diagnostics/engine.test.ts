@@ -80,6 +80,17 @@ describe('diagnose — runtime error code', () => {
   });
 });
 
+describe('diagnose — execution limit', () => {
+  it('reports the timed-out tests as evidence', () => {
+    const report = makeReport('function binarySearch(array, target) { while (true) {} }');
+    const timeout = diagnose(report).find((result) => result.ruleId === 'timeout');
+
+    expect(report.status).toBe('timeout');
+    expect(timeout?.evidenceRefs.length).toBeGreaterThan(0);
+    expect(timeout?.statement).toContain('not a wall-clock timeout');
+  });
+});
+
 describe('diagnose — new enhanced rules', () => {
   it('fires all-but-boundary-pass rule when right-boundary fails', () => {
     const report = makeReport(BUGGY_STARTER);

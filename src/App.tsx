@@ -10,16 +10,35 @@ import { TraceViewer } from './components/TraceViewer';
 import { HintPanel } from './components/HintPanel';
 import { AISearchLab } from './components/AISearchLab';
 import { TicTacToeLab } from './components/TicTacToeLab';
+import { KnowledgeLab } from './components/KnowledgeLab';
+import { InterpretableMLLab } from './components/InterpretableMLLab';
+import { SortingLab } from './components/SortingLab';
+import { GraphTraversalLab } from './components/GraphTraversalLab';
 import { TOCAutomataLab } from './components/TOCAutomataLab';
+import { TOCNFALab } from './components/TOCNFALab';
+import { TOCCFGLab } from './components/TOCCFGLab';
+import { TOCPDALab } from './components/TOCPDALab';
+import { TOCTuringMachineLab } from './components/TOCTuringMachineLab';
 import { TinyCPULab } from './components/TinyCPULab';
+import { TinyCPUPipelineLab } from './components/TinyCPUPipelineLab';
+import { TinyCPUIOLab } from './components/TinyCPUIOLab';
+import { CacheLab } from './components/CacheLab';
 import styles from './App.module.css';
 
 export type SubjectModule = 'daa' | 'ai' | 'toc' | 'coa';
+type AILab = 'search' | 'tictactoe' | 'knowledge' | 'ml';
+type DAALab = 'binary-search' | 'sorting' | 'graph';
+type TOCLab = 'dfa' | 'nfa' | 'cfg' | 'pda' | 'tm';
+type COALab = 'tinycpu' | 'pipeline' | 'io' | 'cache';
 
 const challenge = binarySearchChallenge;
 
 export function App() {
   const [activeModule, setActiveModule] = useState<SubjectModule>('daa');
+  const [activeDAALab, setActiveDAALab] = useState<DAALab>('binary-search');
+  const [activeAILab, setActiveAILab] = useState<AILab>('search');
+  const [activeTOCLab, setActiveTOCLab] = useState<TOCLab>('dfa');
+  const [activeCOALab, setActiveCOALab] = useState<COALab>('tinycpu');
 
   // DAA Binary Search Lab State
   const [sourceCode, setSourceCode] = useState(challenge.buggyStarterCode);
@@ -95,7 +114,9 @@ export function App() {
   };
 
   const diagnostics = report ? diagnose(report) : [];
-  const hasFailed = report?.status === 'failed' || report?.status === 'runtime_error';
+  const hasFailed = report?.status === 'failed'
+    || report?.status === 'runtime_error'
+    || report?.status === 'timeout';
   const hasRun = report !== null;
 
   const statusLabel: Record<RunStatus, string> = {
@@ -105,7 +126,7 @@ export function App() {
     passed: '✓ All tests passed',
     failed: '✗ Tests failed',
     runtime_error: '⚠ Runtime error',
-    timeout: '⏱ Timeout',
+    timeout: '⏱ Execution limit reached',
     cancelled: 'Cancelled',
   };
 
@@ -168,15 +189,43 @@ export function App() {
       {/* Main Body per Active Subject */}
       {activeModule === 'daa' && (
         <>
-          <section className={styles.challengeBar}>
-            <div className={styles.challengeMetaRow}>
-              <h2 className={styles.challengeTitle}>{challenge.title}</h2>
-              <span className={styles.subjectTag}>DAA · Divide &amp; Conquer</span>
-            </div>
-            <p className={styles.challengeDesc}>{challenge.description}</p>
-          </section>
+          <nav className={styles.moduleNav} role="tablist" aria-label="DAA Labs">
+            <button
+              role="tab"
+              aria-selected={activeDAALab === 'binary-search'}
+              className={[styles.navTab, activeDAALab === 'binary-search' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveDAALab('binary-search')}
+            >
+              Binary Search Debugger
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeDAALab === 'sorting'}
+              className={[styles.navTab, activeDAALab === 'sorting' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveDAALab('sorting')}
+            >
+              Sorting Lab
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeDAALab === 'graph'}
+              className={[styles.navTab, activeDAALab === 'graph' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveDAALab('graph')}
+            >
+              Graph Traversal
+            </button>
+          </nav>
+          {activeDAALab === 'binary-search' && (
+            <>
+              <section className={styles.challengeBar}>
+                <div className={styles.challengeMetaRow}>
+                  <h2 className={styles.challengeTitle}>{challenge.title}</h2>
+                  <span className={styles.subjectTag}>DAA · Divide &amp; Conquer</span>
+                </div>
+                <p className={styles.challengeDesc}>{challenge.description}</p>
+              </section>
 
-          <main className={styles.main}>
+              <main className={styles.main}>
             {/* Left column: editor + run controls */}
             <div className={styles.leftCol}>
               <CodeEditor
@@ -277,30 +326,163 @@ export function App() {
                 />
               </div>
             </div>
-          </main>
+              </main>
+            </>
+          )}
+          {activeDAALab === 'sorting' && (
+            <main className={styles.standaloneMain}>
+              <SortingLab />
+            </main>
+          )}
+          {activeDAALab === 'graph' && (
+            <main className={styles.standaloneMain}>
+              <GraphTraversalLab />
+            </main>
+          )}
         </>
       )}
 
       {activeModule === 'ai' && (
         <main className={styles.standaloneMain}>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <AISearchLab />
+          <div className={styles.moduleNav} role="tablist" aria-label="AI Foundations Labs">
+            <button
+              role="tab"
+              aria-selected={activeAILab === 'search'}
+              className={[styles.navTab, activeAILab === 'search' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveAILab('search')}
+            >
+              State Space Search
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeAILab === 'tictactoe'}
+              className={[styles.navTab, activeAILab === 'tictactoe' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveAILab('tictactoe')}
+            >
+              Tic-Tac-Toe
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeAILab === 'knowledge'}
+              className={[styles.navTab, activeAILab === 'knowledge' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveAILab('knowledge')}
+            >
+              Knowledge &amp; Inference
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeAILab === 'ml'}
+              className={[styles.navTab, activeAILab === 'ml' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveAILab('ml')}
+            >
+              Interpretable ML
+            </button>
           </div>
-          <div>
-            <TicTacToeLab />
+          <div role="tabpanel" aria-label="Selected AI Foundations lab" style={{ marginTop: '1rem' }}>
+            {activeAILab === 'search' && <AISearchLab />}
+            {activeAILab === 'tictactoe' && <TicTacToeLab />}
+            {activeAILab === 'knowledge' && <KnowledgeLab />}
+            {activeAILab === 'ml' && <InterpretableMLLab />}
           </div>
         </main>
       )}
 
       {activeModule === 'toc' && (
         <main className={styles.standaloneMain}>
-          <TOCAutomataLab />
+          <div className={styles.moduleNav} role="tablist" aria-label="TOC Labs">
+            <button
+              role="tab"
+              aria-selected={activeTOCLab === 'dfa'}
+              className={[styles.navTab, activeTOCLab === 'dfa' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveTOCLab('dfa')}
+            >
+              DFA Simulator
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeTOCLab === 'nfa'}
+              className={[styles.navTab, activeTOCLab === 'nfa' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveTOCLab('nfa')}
+            >
+              NFA &amp; Regex
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeTOCLab === 'cfg'}
+              className={[styles.navTab, activeTOCLab === 'cfg' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveTOCLab('cfg')}
+            >
+              CFG Parser
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeTOCLab === 'pda'}
+              className={[styles.navTab, activeTOCLab === 'pda' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveTOCLab('pda')}
+            >
+              PDA Simulator
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeTOCLab === 'tm'}
+              className={[styles.navTab, activeTOCLab === 'tm' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveTOCLab('tm')}
+            >
+              Turing Machine
+            </button>
+          </div>
+          <div role="tabpanel" aria-label="Selected TOC lab" style={{ marginTop: '1rem' }}>
+            {activeTOCLab === 'dfa' && <TOCAutomataLab />}
+            {activeTOCLab === 'nfa' && <TOCNFALab />}
+            {activeTOCLab === 'cfg' && <TOCCFGLab />}
+            {activeTOCLab === 'pda' && <TOCPDALab />}
+            {activeTOCLab === 'tm' && <TOCTuringMachineLab />}
+          </div>
         </main>
       )}
 
       {activeModule === 'coa' && (
         <main className={styles.standaloneMain}>
-          <TinyCPULab />
+          <div className={styles.moduleNav} role="tablist" aria-label="COA Labs">
+            <button
+              role="tab"
+              aria-selected={activeCOALab === 'tinycpu'}
+              className={[styles.navTab, activeCOALab === 'tinycpu' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveCOALab('tinycpu')}
+            >
+              TinyCPU Simulator
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeCOALab === 'pipeline'}
+              className={[styles.navTab, activeCOALab === 'pipeline' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveCOALab('pipeline')}
+            >
+              Pipeline &amp; Hazards
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeCOALab === 'io'}
+              className={[styles.navTab, activeCOALab === 'io' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveCOALab('io')}
+            >
+              Interactive I/O
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeCOALab === 'cache'}
+              className={[styles.navTab, activeCOALab === 'cache' ? styles.activeTab : ''].join(' ')}
+              onClick={() => setActiveCOALab('cache')}
+            >
+              Cache Hierarchy
+            </button>
+          </div>
+          <div role="tabpanel" aria-label="Selected COA lab" style={{ marginTop: '1rem' }}>
+            {activeCOALab === 'tinycpu' && <TinyCPULab />}
+            {activeCOALab === 'pipeline' && <TinyCPUPipelineLab />}
+            {activeCOALab === 'io' && <TinyCPUIOLab />}
+            {activeCOALab === 'cache' && <CacheLab />}
+          </div>
         </main>
       )}
 

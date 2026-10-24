@@ -11,10 +11,10 @@ TRACEFORGE is an educational laboratory for computer-science students and instru
 
 | Subject | Interactive Lab | Working Features & Evidence Engine | Status |
 |---|---|---|---|
-| **AI Foundations** | **Search & Reasoning Lab** | Interactive 6x6 grid environment with obstacles; five search algorithms — BFS, DFS, UCS, Greedy Best-First, and A* (informed heuristic search with Manhattan distance); real-time frontier, explored states, path cost $g(n)$, heuristic $h(n)$, and step-by-step expansion trace; rule-based forward-chaining diagnostic inference; Tic-Tac-Toe game with Minimax + alpha-beta pruning (AI never loses). | **Implemented & Tested** |
-| **Design & Analysis of Algorithms (DAA)** | **Algorithm Debugging & Complexity Lab** | Editable Binary Search off-by-one debugging challenge; safe AST-interpreted sandbox (Acorn ESTree parser); 9 deterministic test cases; genuine execution trace; progressive hints; empirical operation counting comparing Binary Search ($O(\log N)$) vs. Linear Search ($O(N)$). | **Implemented & Tested** |
-| **Theory of Computation (TOC)** | **Automata Lab** | Interactive Deterministic Finite Automaton (DFA) simulator with three built-in automata: binary strings ending in "01", even number of 1s, and divisible-by-3; formal 5-tuple $(Q, \Sigma, \delta, q_0, F)$ definition viewer; interactive input strings and presets; deterministic cycle-by-cycle state transition trace and accept/reject decision evidence; visual state diagram showing start, accept, and final states. | **Implemented & Tested** |
-| **Computer Organization & Architecture (COA)** | **TinyCPU Simulator** | Educational 8-bit instruction set simulator with Program Counter (PC), 4 registers (R0–R3), zero flag, and 16-byte RAM; Fetch-Decode-Execute micro-architectural cycles; ISA supporting `MOV`, `ADD`, `SUB`, `LOAD`, `STORE`, `JMP`, `JZ`, `HALT`; three built-in example programs (sum loop, factorial, Fibonacci) with program selector; editable assembly; Read-After-Write (RAW) pipeline hazard detection. | **Implemented & Tested** |
+| **AI Foundations** | **Search, Reasoning, Knowledge & ML Lab** | Five grid-search strategies; Minimax + alpha-beta Tic-Tac-Toe; forward/backward-chaining Knowledge Representation Lab; interpretable logistic regression with learned weights, training trace, held-out predictions, and evaluation metrics. | **Implemented & Tested** |
+| **Design & Analysis of Algorithms (DAA)** | **Algorithm Debugging & Complexity Lab** | Editable Binary Search debugging challenge and evidence export; empirical Binary vs. Linear Search comparison; Bubble, Insertion, and Merge Sort; BFS/DFS graph traversal with frontier and visited-state evidence. | **Implemented & Tested** |
+| **Theory of Computation (TOC)** | **Automata & Formal Languages Lab** | Three DFA simulators; Thompson epsilon-NFA compilation/simulation for a documented regex subset; CYK parse tree and trace for a curated CNF grammar; bounded PDA stack simulation for aⁿbⁿ; bounded single-tape unary increment Turing Machine. | **Implemented & Tested (scoped examples)** |
+| **Computer Organization & Architecture (COA)** | **TinyCPU Architecture Labs** | Sequential 8-bit TinyCPU with editable assembly; separate five-stage cycle-by-cycle pipeline timing model with RAW stalls; interactive byte input/output instructions; cache hierarchy simulator. | **Implemented & Tested (scoped models)** |
 
 ---
 
@@ -23,12 +23,15 @@ TRACEFORGE is an educational laboratory for computer-science students and instru
 1. **Independent Deterministic Domain Engines**: Pure TypeScript domain logic separated cleanly from the React UI (`src/engine/`):
    - `aiSearch.ts`: Breadth-First Search & A* Search with Manhattan heuristic.
    - `binarySearch.ts` & `safeInterpreter.ts`: Acorn-based sandboxed AST interpreter for student Binary Search submissions.
+   - `sorting.ts`: Bubble, Insertion, and Merge Sort with execution-derived operation traces.
+   - `graphTraversal.ts`: deterministic BFS/DFS with editable adjacency lists and actual frontier traces.
+   - `logisticRegression.ts`: two-feature logistic classifier trained with gradient descent and evaluated on a deterministic stratified holdout set.
    - `daaComparison.ts`: Empirical step counter comparing logarithmic vs. linear complexity.
-   - `tocDFA.ts`: Deterministic finite automaton transition engine.
-   - `tinyCPU.ts`: 8-bit educational CPU with memory and pipeline hazard tracker.
+   - `tocDFA.ts`, `tocNFA.ts`, `tocCFG.ts`, `tocPDA.ts`, and `tocTM.ts`: DFA/NFA execution, regex compilation, curated CNF parsing, bounded PDA simulation, and a simplified Turing Machine.
+   - `tinyCPU.ts` and `tinyCPUPipeline.ts`: sequential 8-bit CPU with byte I/O and a separate five-stage no-forwarding pipeline timing model.
 2. **Deterministic Evidence Contracts**: Every state change, transition, or instruction generates a concrete, verifiable step trace.
 3. **Strict Bounded Execution**: Every interpreter, state-space search, and CPU simulator enforces explicit step limits (e.g., 500 steps) to prevent browser freezes.
-4. **Lightweight Client Bundle**: Fast, offline browser execution without multi-megabyte dependencies (entire production bundle is ~311 kB uncompressed, ~98 kB gzip).
+4. **Lightweight Client Bundle**: Fast, offline browser execution without multi-megabyte dependencies (production JavaScript bundle is approximately 411 kB uncompressed, 124 kB gzip).
 
 ---
 
@@ -41,7 +44,7 @@ npm ci
 # Start development server
 npm run dev
 
-# Run full test suite (117 automated tests across 10 test files)
+# Run full test suite (266 automated tests across 30 test files)
 npm test
 
 # Run ESLint (enforced at 0 warnings)
@@ -58,7 +61,7 @@ npm run build
 
 ## 4. Subject Mapping & Academic Syllabus Status
 
-- **AI Foundations**: State space search (BFS/A*) and rule-based forward-chaining diagnostic inference are fully implemented and verified. Machine learning / neural training is intentionally deferred as noted in `docs/FOUR_SUBJECT_MAPPING.md`.
-- **DAA**: Divide-and-conquer binary search, off-by-one boundary bugs, and operation-counting comparisons ($O(\log N)$ vs $O(N)$) are fully implemented and tested.
-- **TOC**: Regular language acceptance, 5-tuple DFA definitions, and step-by-step state transition traces are fully implemented. Pushdown Automata and Turing machines remain planned for future iterations.
-- **COA**: Educational instruction execution, register files, PC, branching on zero flag, and pipeline RAW hazard detection are fully implemented. Three built-in example programs (sum loop, factorial, Fibonacci) with program selector. Cache hierarchy simulation with direct-mapped and set-associative configurations, LRU/FIFO replacement policies, and thrashing pattern analysis.
+- **AI Foundations**: Five search strategies, Minimax Tic-Tac-Toe, forward/backward-chaining Knowledge Representation, and an interpretable two-feature logistic-regression experiment are implemented. Its small synthetic dataset is an educational example, not a validated real-world model.
+- **DAA**: Binary Search debugging, evidence export, search operation comparison, three traced sorting algorithms, and BFS/DFS graph traversal are implemented. Other syllabus-specific algorithms remain dependent on scope confirmation.
+- **TOC**: DFA, a documented regular-expression subset compiled to epsilon-NFA, a curated CNF parser, one bounded PDA example, and one bounded single-tape Turing Machine example are implemented. The grammar and machine sets are curated educational examples, not general grammar/machine editors.
+- **COA**: Sequential instruction execution, register files, PC, branching, byte input/output, a separate five-stage pipeline timing model with RAW stalls, and cache hierarchy simulation are implemented. The pipeline does not dynamically execute branches or model a complete cycle-accurate CPU.

@@ -46,8 +46,15 @@ export function runChallenge(
   }
 
   const anyError = allResults.some((r) => r.status === 'error');
+  const anyTimeout = allResults.some((r) => r.status === 'timeout');
   const anyFailed = allResults.some((r) => r.status === 'failed');
-  const status: RunStatus = anyError ? 'runtime_error' : anyFailed ? 'failed' : 'passed';
+  const status: RunStatus = anyTimeout
+    ? 'timeout'
+    : anyError
+      ? 'runtime_error'
+      : anyFailed
+        ? 'failed'
+        : 'passed';
 
   return {
     schemaVersion: '1.0',

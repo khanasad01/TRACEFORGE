@@ -29,6 +29,23 @@ describe('runChallenge', () => {
     expect(report.tests.every((t) => t.status === 'passed')).toBe(true);
   });
 
+  it('reports execution-limit exhaustion as timeout, not runtime_error', () => {
+    const sourceCode = `
+      function binarySearch(array, target) {
+        while (true) {}
+      }
+    `;
+    const report = runChallenge(binarySearchChallenge, {
+      challengeId: binarySearchChallenge.id,
+      sourceCode,
+      runId: 'test-run-timeout',
+    });
+
+    expect(report.status).toBe('timeout');
+    expect(report.tests[0].status).toBe('timeout');
+    expect(report.trace[0].event).toBe('execution_limit');
+  });
+
   it('includes all declared test cases in output', () => {
     const report = runChallenge(binarySearchChallenge, {
       challengeId: binarySearchChallenge.id,

@@ -60,7 +60,7 @@ describe('TRACEFORGE Integrated Four-Subject Navigation', () => {
     fireEvent.click(runCpuBtn);
 
     expect(screen.getByText(/CPU Architectural State/i)).toBeInTheDocument();
-    expect(screen.getByText(/Instruction Cycle Trace & Pipeline Hazards/i)).toBeInTheDocument();
+    expect(screen.getByText(/Sequential Instruction Trace & Dependency Warnings/i)).toBeInTheDocument();
   });
 
   it('verifies export evidence button appears after running DAA lab', async () => {

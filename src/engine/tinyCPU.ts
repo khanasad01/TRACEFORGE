@@ -6,7 +6,7 @@
  * - General Purpose Registers (R0, R1, R2, R3)
  * - Condition Flags (Zero Flag Z)
  * - Main Data Memory (array of 16 values)
- * - Micro-architectural cycle stages: Fetch -> Decode -> Execute
+ * - Sequential instruction execution with complete before/after state snapshots
  * - Simple data hazard / pipeline stall demonstration
  *
  * Instruction Set Architecture (ISA):
@@ -17,6 +17,8 @@
  * - SUB   Rd, Rs        -> Rd = Rd - Rs (updates Z flag)
  * - JMP   addr          -> PC = addr
  * - JZ    addr          -> if (Z == 1) PC = addr
+ * - IN    Rd            -> Rd = next value from the input queue
+ * - OUT   Rs            -> append Rs to the output stream
  * - HALT                -> Stop execution
  */
 
@@ -28,7 +30,7 @@ export interface CPUState {
   halted: boolean;
 }
 
-export type Opcode = 'LOAD' | 'STORE' | 'MOV' | 'ADD' | 'SUB' | 'JMP' | 'JZ' | 'HALT';
+export type Opcode = 'LOAD' | 'STORE' | 'MOV' | 'ADD' | 'SUB' | 'JMP' | 'JZ' | 'IN' | 'OUT' | 'HALT';
 
 export interface Instruction {
   line: number;
@@ -45,6 +47,7 @@ export interface CPUStepTrace {
   stage: 'FETCH' | 'DECODE' | 'EXECUTE';
   stateBefore: CPUState;
   stateAfter: CPUState;
+  outputValues: number[];
   hazardDetected?: string;
   note: string;
 }
@@ -54,6 +57,8 @@ export interface CPUExecutionResult {
   finalState: CPUState;
   trace: CPUStepTrace[];
   haltedNormally: boolean;
+  inputValues: number[];
+  outputValues: number[];
   error?: string;
 }
 
@@ -81,6 +86,13 @@ export function assembleProgram(assemblyCode: string): Instruction[] {
       case 'JMP':
       case 'JZ':
         instructions.push({ line: i + 1, raw: clean, opcode: op, dest: parts[1] });
+        break;
+      case 'IN':
+      case 'OUT':
+        if (!/^R[0-3]$/i.test(parts[1] ?? '')) {
+          throw new Error(`Line ${i + 1}: ${op} requires a register R0 through R3.`);
+        }
+        instructions.push({ line: i + 1, raw: clean, opcode: op, dest: parts[1]?.toLowerCase() });
         break;
       case 'MOV':
       case 'LOAD':
@@ -124,6 +136,7 @@ export function runTinyCPU(
   instructions: Instruction[],
   initialMemory: number[] = new Array(16).fill(0),
   maxCycles = 100,
+  inputValues: number[] = [],
 ): CPUExecutionResult {
   const state: CPUState = {
     pc: 0,
@@ -134,10 +147,13 @@ export function runTinyCPU(
   };
 
   const trace: CPUStepTrace[] = [];
+  const inputQueue = [...inputValues];
+  const outputValues: number[] = [];
   let cycle = 0;
   let lastModifiedReg: string | null = null;
+  let runtimeError: string | undefined;
 
-  while (!state.halted && cycle < maxCycles) {
+  while (!state.halted && !runtimeError && cycle < maxCycles) {
     if (state.pc < 0 || state.pc >= instructions.length) {
       state.halted = true;
       break;
@@ -147,7 +163,7 @@ export function runTinyCPU(
     const stateBefore = cloneState(state);
     const inst = instructions[state.pc];
 
-    // Simple educational pipeline hazard detection (Read-After-Write)
+    // Advisory only; cycle-level stalls are modeled by tinyCPUPipeline.ts.
     let hazardDetected: string | undefined;
     if (lastModifiedReg && (inst.src === lastModifiedReg || inst.dest === lastModifiedReg)) {
       hazardDetected = `RAW Hazard: Instruction reads/writes ${lastModifiedReg} right after previous write. In a pipelined CPU, this requires a forward or 1-cycle stall.`;
@@ -217,6 +233,28 @@ export function runTinyCPU(
         lastModifiedReg = null;
         break;
       }
+      case 'IN': {
+        if (inputQueue.length === 0) {
+          runtimeError = `Input exhausted at line ${inst.line}: IN ${inst.dest?.toUpperCase() ?? '?' } requires another value.`;
+          nextPC = state.pc;
+          note = runtimeError;
+          break;
+        }
+        const dest = inst.dest as RegKey;
+        const value = inputQueue.shift()!;
+        state.registers[dest] = value & 0xff;
+        lastModifiedReg = dest;
+        note = `Read input ${value} into ${dest.toUpperCase()}`;
+        break;
+      }
+      case 'OUT': {
+        const src = inst.dest as RegKey;
+        const value = state.registers[src];
+        outputValues.push(value);
+        lastModifiedReg = null;
+        note = `Wrote ${value} from ${src.toUpperCase()} to output`;
+        break;
+      }
       case 'HALT': {
         state.halted = true;
         lastModifiedReg = null;
@@ -234,6 +272,7 @@ export function runTinyCPU(
       stage: 'EXECUTE',
       stateBefore,
       stateAfter: cloneState(state),
+      outputValues: [...outputValues],
       hazardDetected,
       note,
     });
@@ -244,6 +283,9 @@ export function runTinyCPU(
     finalState: state,
     trace,
     haltedNormally: state.halted,
+    inputValues: [...inputValues],
+    outputValues,
+    ...(runtimeError ? { error: runtimeError } : {}),
   };
 }
 

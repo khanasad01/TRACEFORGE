@@ -18,7 +18,7 @@ export type RunStatus =
   | 'timeout'
   | 'cancelled';
 
-export type TestStatus = 'passed' | 'failed' | 'error' | 'skipped';
+export type TestStatus = 'passed' | 'failed' | 'error' | 'timeout' | 'skipped';
 
 // ---------------------------------------------------------------------------
 // Evidence envelope (canonical schema v1.0)
@@ -43,7 +43,8 @@ export interface TraceEvent {
     | 'move_low'
     | 'move_high'
     | 'found'
-    | 'not_found';
+    | 'not_found'
+    | 'execution_limit';
   variables: Record<string, unknown>;
   /** Optional reference to the test case this trace event belongs to. */
   evidenceRef?: string;

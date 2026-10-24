@@ -15,6 +15,7 @@ const EVENT_LABELS: Record<TraceEvent['event'], string> = {
   move_high: '← Move high',
   found: '✓ Found',
   not_found: '✗ Not found',
+  execution_limit: '⏱ Execution limit',
 };
 
 const EVENT_CLASS: Partial<Record<TraceEvent['event'], string>> = {

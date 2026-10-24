@@ -1,0 +1,294 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-space-md);
+}
+
+.header,
+.card,
+.learning {
+  background: var(--tf-color-panel);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border);
+  border-radius: var(--tf-radius-md);
+  padding: var(--tf-space-lg);
+  box-shadow: var(--tf-shadow-sm);
+}
+
+.title {
+  margin: 0 0 var(--tf-space-2xs);
+  color: var(--tf-color-text-bright);
+  font-size: var(--tf-font-size-xl);
+  font-weight: var(--tf-font-weight-bold);
+  letter-spacing: -0.01em;
+}
+
+.description,
+.sectionNote,
+.empty {
+  margin: 0;
+  color: var(--tf-color-text-secondary);
+  font-size: var(--tf-font-size-sm);
+  line-height: var(--tf-font-lineheight-base);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--tf-space-md);
+}
+
+.heading {
+  margin: 0 0 var(--tf-space-sm);
+  color: var(--tf-color-text-heading);
+  font-size: var(--tf-font-size-md);
+  font-weight: var(--tf-font-weight-semibold);
+}
+
+.subheading {
+  margin: var(--tf-space-md) 0 var(--tf-space-xs);
+  color: var(--tf-color-text-primary);
+  font-size: var(--tf-font-size-sm);
+  font-weight: var(--tf-font-weight-medium);
+}
+
+.factList,
+.ruleList,
+.traceList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.factList {
+  display: flex;
+  gap: var(--tf-space-2xs);
+  flex-wrap: wrap;
+}
+
+.factList li,
+.rule,
+.traceStep {
+  padding: var(--tf-space-xs);
+  background: var(--tf-color-canvas);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border);
+  border-radius: var(--tf-radius-sm);
+}
+
+.ruleList,
+.traceList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-space-xs);
+}
+
+.rule p,
+.traceStep p,
+.learning p,
+.result p {
+  margin: var(--tf-space-3xs) 0 0;
+  color: var(--tf-color-text-secondary);
+  font-size: var(--tf-font-size-xs);
+  line-height: var(--tf-font-lineheight-base);
+}
+
+.ruleId {
+  color: var(--tf-color-accent);
+  font-size: var(--tf-font-size-xs);
+  font-weight: var(--tf-font-weight-bold);
+  font-family: var(--tf-font-mono);
+}
+
+.ruleLogic {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-space-2xs);
+  margin-top: var(--tf-space-2xs);
+  color: var(--tf-color-text-secondary);
+  font-size: var(--tf-font-size-xs);
+}
+
+.ruleLogic > span:first-child {
+  display: flex;
+  gap: var(--tf-space-3xs);
+  flex-wrap: wrap;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-space-sm);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-space-3xs);
+  color: var(--tf-color-text-primary);
+  font-size: var(--tf-font-size-xs);
+}
+
+.field select,
+.field input {
+  width: 100%;
+  padding: var(--tf-space-2xs) var(--tf-space-xs);
+  color: var(--tf-color-text-bright);
+  background: var(--tf-color-canvas);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border-deep);
+  border-radius: var(--tf-radius-sm);
+  font: inherit;
+  font-size: var(--tf-font-size-sm);
+  transition: border-color var(--tf-duration-sm) var(--tf-ease-standard);
+}
+
+.field select:focus,
+.field input:focus {
+  outline: none;
+  border-color: var(--tf-color-accent);
+  box-shadow: 0 0 0 1px var(--tf-color-accent);
+}
+
+.buttons {
+  display: flex;
+  gap: var(--tf-space-xs);
+  flex-wrap: wrap;
+}
+
+.runButton,
+.resetButton {
+  padding: var(--tf-space-2xs) var(--tf-space-md);
+  border: 0;
+  border-radius: var(--tf-radius-sm);
+  font-weight: var(--tf-font-weight-semibold);
+  font-size: var(--tf-font-size-sm);
+  cursor: pointer;
+  transition: all var(--tf-duration-sm) var(--tf-ease-standard);
+  user-select: none;
+}
+
+.runButton {
+  background: var(--tf-color-accent);
+  color: var(--tf-color-text-white);
+  box-shadow: var(--tf-shadow-sm);
+}
+
+.runButton:hover {
+  background: var(--tf-color-accent-hover);
+}
+
+.runButton:active {
+  background: var(--tf-color-accent-active);
+  transform: scale(0.98);
+}
+
+.runButton:focus-visible {
+  outline: none;
+  box-shadow: var(--tf-focus-ring);
+}
+
+.resetButton {
+  background: transparent;
+  color: var(--tf-color-text-secondary);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border-deep);
+}
+
+.resetButton:hover {
+  color: var(--tf-color-text-bright);
+  background: var(--tf-color-surface-hover);
+  border-color: var(--tf-color-border-strong);
+}
+
+.resetButton:active {
+  transform: scale(0.98);
+}
+
+.resetButton:focus-visible {
+  outline: none;
+  box-shadow: var(--tf-focus-ring);
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-space-2xs);
+  margin-top: var(--tf-space-md);
+  padding: var(--tf-space-sm);
+  background: var(--tf-color-canvas);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border);
+  border-left: var(--tf-line-width-thick) solid var(--tf-color-accent);
+  border-radius: var(--tf-radius-sm);
+  color: var(--tf-color-text-primary);
+  font-size: var(--tf-font-size-sm);
+}
+
+.resultLabel {
+  color: var(--tf-color-text-secondary);
+  font-size: var(--tf-font-size-xs);
+  font-weight: var(--tf-font-weight-medium);
+}
+
+.result code,
+.sectionNote code,
+.traceStep code,
+.learning code,
+.ruleLogic code,
+.factList code {
+  display: inline-block;
+  margin: 0 0.15rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: var(--tf-radius-xs);
+  background: var(--tf-color-surface-hover);
+  color: var(--tf-color-info);
+  font-family: var(--tf-font-mono);
+  font-size: var(--tf-font-size-xs);
+}
+
+.traceStep {
+  padding: var(--tf-space-sm);
+}
+
+.traceTitle {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--tf-space-sm);
+  flex-wrap: wrap;
+  color: var(--tf-color-text-heading);
+  font-size: var(--tf-font-size-xs);
+  font-weight: var(--tf-font-weight-medium);
+}
+
+.satisfied {
+  color: var(--tf-color-success);
+}
+
+.unsatisfied,
+.cycleNote {
+  color: var(--tf-color-warning) !important;
+}
+
+.learning .columns > div {
+  min-width: 0;
+}
+
+.learning p + p {
+  margin-top: var(--tf-space-sm);
+}
+
+.sectionNote code {
+  margin-left: var(--tf-space-3xs);
+}
+
+@media (max-width: 760px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .header,
+  .card,
+  .learning {
+    padding: var(--tf-space-md);
+  }
+
+  .buttons > button {
+    flex: 1;
+  }
+}
