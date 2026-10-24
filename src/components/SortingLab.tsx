@@ -7,6 +7,7 @@ import {
 } from '../engine/sorting';
 import styles from './SortingLab.module.css';
 import { Tooltip } from './Tooltip';
+import { AnimatedCounter } from './AnimatedCounter';
 
 const PRESETS: { name: string; value: string }[] = [
   { name: 'Custom input', value: '' },
@@ -177,8 +178,8 @@ export function SortingLab() {
             <section className={styles.card} aria-labelledby="operation-counts-title">
               <h3 className={styles.heading} id="operation-counts-title">Observed operation counts</h3>
               <dl className={styles.metrics}>
-                <div><dt>Comparisons</dt><dd>{result.comparisons}</dd></div>
-                <div><dt>Swaps</dt><dd>{result.swaps}</dd></div>
+                <div><dt>Comparisons</dt><dd><AnimatedCounter value={result.comparisons} /></dd></div>
+                <div><dt>Swaps</dt><dd><AnimatedCounter value={result.swaps} /></dd></div>
                 <div><dt>Writes</dt><dd>{result.writes}</dd></div>
               </dl>
               <p className={styles.note}>

@@ -1,54 +1,54 @@
-import { afterEach, describe, it, expect } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { AnimatedCounter } from '../../components/AnimatedCounter';
 
-afterEach(() => {
-  cleanup();
-  Reflect.deleteProperty(window, 'matchMedia');
-});
+beforeEach(() => cleanup());
 
-function mockMatchMedia(matches: boolean) {
-  const mq = (query: string) => ({
-    matches,
-    media: query,
+function mockMatchMedia(reduce: boolean) {
+  window.matchMedia = vi.fn().mockImplementation((q: string) => ({
+    matches: reduce,
+    media: q,
     onchange: null,
-    addEventListener() {},
-    removeEventListener() {},
-    addListener() {},
-    removeListener() {},
-    dispatchEvent: () => false,
-  });
-  Object.defineProperty(window, 'matchMedia', { configurable: true, writable: true, value: mq });
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
 }
 
 describe('AnimatedCounter', () => {
   it('renders the initial value immediately', () => {
-    render(<AnimatedCounter value={7} />);
-    expect(screen.getByText('7')).toBeInTheDocument();
-  });
-
-  it('shows the new value instantly when matchMedia is unavailable', () => {
-    const { rerender } = render(<AnimatedCounter value={1} />);
-    rerender(<AnimatedCounter value={42} />);
+    render(<AnimatedCounter value={42} />);
     expect(screen.getByText('42')).toBeInTheDocument();
   });
-
-  it('shows the new value instantly with prefers-reduced-motion', () => {
-    mockMatchMedia(true);
-    const { rerender } = render(<AnimatedCounter value={1} />);
-    rerender(<AnimatedCounter value={99} />);
-    expect(screen.getByText('99')).toBeInTheDocument();
+  it('renders 0 immediately', () => {
+    render(<AnimatedCounter value={0} />);
+    expect(screen.getByText('0')).toBeInTheDocument();
   });
-
-  it('animates and ends at exactly the real value', async () => {
-    mockMatchMedia(false);
-    const { rerender } = render(<AnimatedCounter value={0} durationMs={40} />);
-    rerender(<AnimatedCounter value={25} durationMs={40} />);
-    await waitFor(() => expect(screen.getByText('25')).toBeInTheDocument(), { timeout: 2000 });
+  it('ends at the exact new value', async () => {
+    const { container, rerender } = render(<AnimatedCounter value={0} />);
+    rerender(<AnimatedCounter value={50} />);
+    await waitFor(() => {
+      expect(container.querySelector('span')?.textContent).toBe('50');
+    });
   });
-
   it('applies the format prop', () => {
-    render(<AnimatedCounter value={5} format={(n) => `${n} ops`} />);
-    expect(screen.getByText('5 ops')).toBeInTheDocument();
+    render(<AnimatedCounter value={7} format={(n) => `count:${n}`} />);
+    expect(screen.getByText('count:7')).toBeInTheDocument();
+  });
+  it('shows new value instantly when reduced motion enabled', () => {
+    mockMatchMedia(true);
+    const { container, rerender } = render(<AnimatedCounter value={5} />);
+    rerender(<AnimatedCounter value={99} />);
+    expect(container.querySelector('span')?.textContent).toBe('99');
+  });
+  it('shows new value instantly when matchMedia unavailable', () => {
+    const original = window.matchMedia;
+    Object.defineProperty(window, 'matchMedia', { value: undefined, configurable: true });
+    const { container, rerender } = render(<AnimatedCounter value={10} />);
+    rerender(<AnimatedCounter value={250} />);
+    expect(container.querySelector('span')?.textContent).toBe('250');
+    Object.defineProperty(window, 'matchMedia', { value: original, configurable: true });
   });
 });
