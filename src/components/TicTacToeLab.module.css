@@ -30,7 +30,7 @@
 
 .gameSection {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: auto 1fr;
   gap: var(--tf-space-lg);
 }
 
@@ -42,14 +42,15 @@
 
 .board {
   display: grid;
-  grid-template-columns: repeat(3, 64px);
-  grid-template-rows: repeat(3, 64px);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   gap: 6px;
   background: var(--tf-color-canvas);
   padding: var(--tf-space-xs);
   border-radius: var(--tf-radius-md);
   border: var(--tf-line-width-thin) solid var(--tf-color-border-deep);
-  aspect-ratio: 1;
+  width: 216px;
+  height: 216px;
   justify-content: center;
   margin: 0 auto;
   box-shadow: var(--tf-shadow-sm);
