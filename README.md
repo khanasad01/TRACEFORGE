@@ -5,6 +5,15 @@
 
 TRACEFORGE is an educational laboratory for computer-science students and instructors. It connects reproducible computational experiments to concrete execution evidence, step-by-step traces, and conceptual understanding across four core computer science subjects.
 
+## What changed (UI Redesign)
+- Unified design token system (`src/styles/tokens.css`) — all 19 component stylesheets migrated
+- WCAG AA contrast verified across all token pairs  
+- Accessible Tooltip on algorithm controls (AI, Sorting, Graph labs)
+- Animated operation counters in SortingLab (reduced-motion safe)
+- Expandable evidence panel in TestResultPanel
+- TicTacToe board layout fixed
+- 292 tests across 34 files (was 117 across 10)
+
 ---
 
 ## 1. Integrated Four-Subject Coverage
@@ -44,7 +53,7 @@ npm ci
 # Start development server
 npm run dev
 
-# Run full test suite (266 automated tests across 30 test files)
+# Run full test suite (292 automated tests across 34 test files)
 npm test
 
 # Run ESLint (enforced at 0 warnings)
