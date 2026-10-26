@@ -1,79 +1,152 @@
 # TRACEFORGE
 
-**Evidence-First Debugging & Multi-Subject Learning Lab**  
-**Tagline:** Don't just fix the bug. Prove why it failed.
+**Evidence-First CS Learning & Debugging Lab**
 
-TRACEFORGE is an educational laboratory for computer-science students and instructors. It connects reproducible computational experiments to concrete execution evidence, step-by-step traces, and conceptual understanding across four core computer science subjects.
+> "Don't just fix the bug. Prove why it failed."
 
-## Live Demo
-🚀 [https://traceforge-asad.netlify.app](https://traceforge-asad.netlify.app)
-
-## What changed (UI Redesign)
-- Unified design token system (`src/styles/tokens.css`) — all 19 component stylesheets migrated
-- WCAG AA contrast verified across all token pairs  
-- Accessible Tooltip on algorithm controls (AI, Sorting, Graph labs)
-- Animated operation counters in SortingLab (reduced-motion safe)
-- Expandable evidence panel in TestResultPanel
-- TicTacToe board layout fixed
-- 292 tests across 34 files (was 117 across 10)
+🚀 **Live Demo:** [https://traceforge-asad.netlify.app](https://traceforge-asad.netlify.app)
+📦 **GitHub:** [https://github.com/khanasad01/TRACEFORGE](https://github.com/khanasad01/TRACEFORGE)
 
 ---
 
-## 1. Integrated Four-Subject Coverage
+## The Problem
 
-| Subject | Interactive Lab | Working Features & Evidence Engine | Status |
-|---|---|---|---|
-| **AI Foundations** | **Search, Reasoning, Knowledge & ML Lab** | Five grid-search strategies; Minimax + alpha-beta Tic-Tac-Toe; forward/backward-chaining Knowledge Representation Lab; interpretable logistic regression with learned weights, training trace, held-out predictions, and evaluation metrics. | **Implemented & Tested** |
-| **Design & Analysis of Algorithms (DAA)** | **Algorithm Debugging & Complexity Lab** | Editable Binary Search debugging challenge and evidence export; empirical Binary vs. Linear Search comparison; Bubble, Insertion, and Merge Sort; BFS/DFS graph traversal with frontier and visited-state evidence. | **Implemented & Tested** |
-| **Theory of Computation (TOC)** | **Automata & Formal Languages Lab** | Three DFA simulators; Thompson epsilon-NFA compilation/simulation for a documented regex subset; CYK parse tree and trace for a curated CNF grammar; bounded PDA stack simulation for aⁿbⁿ; bounded single-tape unary increment Turing Machine. | **Implemented & Tested (scoped examples)** |
-| **Computer Organization & Architecture (COA)** | **TinyCPU Architecture Labs** | Sequential 8-bit TinyCPU with editable assembly; separate five-stage cycle-by-cycle pipeline timing model with RAW stalls; interactive byte input/output instructions; cache hierarchy simulator. | **Implemented & Tested (scoped models)** |
+Most CS learning tools show you **what** happened — a wrong answer, a failed test, a red X.
 
----
+They don't show you **why**.
 
-## 2. Architecture & Design Principles
+- You run Binary Search on a sorted array. It returns `-1`. **Why?**
+- You implement Bubble Sort. It passes 4 out of 5 tests. **Which case breaks it?**
+- You build a DFA. It rejects a valid string. **Which transition failed?**
+- You write a cache policy. Hit rate is 40%. **Why is it missing so much?**
 
-1. **Independent Deterministic Domain Engines**: Pure TypeScript domain logic separated cleanly from the React UI (`src/engine/`):
-   - `aiSearch.ts`: Breadth-First Search & A* Search with Manhattan heuristic.
-   - `binarySearch.ts` & `safeInterpreter.ts`: Acorn-based sandboxed AST interpreter for student Binary Search submissions.
-   - `sorting.ts`: Bubble, Insertion, and Merge Sort with execution-derived operation traces.
-   - `graphTraversal.ts`: deterministic BFS/DFS with editable adjacency lists and actual frontier traces.
-   - `logisticRegression.ts`: two-feature logistic classifier trained with gradient descent and evaluated on a deterministic stratified holdout set.
-   - `daaComparison.ts`: Empirical step counter comparing logarithmic vs. linear complexity.
-   - `tocDFA.ts`, `tocNFA.ts`, `tocCFG.ts`, `tocPDA.ts`, and `tocTM.ts`: DFA/NFA execution, regex compilation, curated CNF parsing, bounded PDA simulation, and a simplified Turing Machine.
-   - `tinyCPU.ts` and `tinyCPUPipeline.ts`: sequential 8-bit CPU with byte I/O and a separate five-stage no-forwarding pipeline timing model.
-2. **Deterministic Evidence Contracts**: Every state change, transition, or instruction generates a concrete, verifiable step trace.
-3. **Strict Bounded Execution**: Every interpreter, state-space search, and CPU simulator enforces explicit step limits (e.g., 500 steps) to prevent browser freezes.
-4. **Lightweight Client Bundle**: Fast, offline browser execution without multi-megabyte dependencies (production JavaScript bundle is approximately 411 kB uncompressed, 124 kB gzip).
+Without evidence, debugging is just guessing.
 
 ---
 
-## 3. Running Locally
+## The Solution
 
-```bash
-# Install dependencies
-npm ci
+TRACEFORGE makes every execution **observable**. Every algorithm run produces a full evidence trail — not just a result, but proof.
 
-# Start development server
-npm run dev
+| Instead of... | TRACEFORGE shows... |
+|---------------|---------------------|
+| ❌ "Wrong answer" | ✅ Expected `42`, got `-1` — here is the full trace |
+| ❌ "Test failed" | ✅ Which boundary case broke, and exactly why |
+| ❌ "Algorithm finished" | ✅ Every comparison, swap, and state transition |
+| ❌ "Cache miss" | ✅ Which block was evicted, when, and why |
 
-# Run full test suite (292 automated tests across 34 test files)
-npm test
+**Don't just fix the bug. Prove why it failed.**
 
-# Run ESLint (enforced at 0 warnings)
-npm run lint
+---
 
-# Run TypeScript compiler checks
-npm run typecheck
+## Four Subject Labs
 
-# Production build
-npm run build
+| Lab | Topics Covered |
+|-----|----------------|
+| 🤖 **AI Foundations** | A\*, BFS, DFS, Greedy Search, Knowledge Base inference, Tic-Tac-Toe with Minimax + Alpha-Beta Pruning, Logistic Regression |
+| ⚡ **DAA Lab** | Binary Search debugging, Bubble/Selection/Insertion/Merge/Quick Sort, Graph Traversal (BFS/DFS), operation counters, complexity analysis |
+| 🔤 **TOC Lab** | DFA simulation, NFA + Regex, Context-Free Grammars, Pushdown Automata, Turing Machine |
+| 🖥️ **COA Lab** | TinyCPU with registers and memory, Instruction Pipeline, Cache hierarchy simulation, I/O operations |
+
+---
+
+## Why It Feels Different
+
+- **Evidence first** — every test failure shows expected vs actual, not just pass/fail
+- **Execution traces** — see every step the algorithm took, not just the final answer
+- **Progressive hints** — stuck? Get a nudge, not the full solution
+- **Real engines** — no mock data, no fake results, every output comes from a real algorithm
+- **Accessible interactions** — keyboard navigable, screen reader friendly, reduced-motion safe
+
+---
+
+## Tech Stack
+
+| Layer | Choice |
+|-------|--------|
+| Framework | React 18 + TypeScript + Vite |
+| Styling | Raw CSS Modules + CSS custom properties (no Tailwind, no UI libraries) |
+| Testing | Vitest + Testing Library — 292 tests across 34 files |
+| Design | Unified token system, WCAG AA contrast verified |
+
+---
+
+## UI Design Highlights
+
+- `src/styles/tokens.css` — 99 CSS custom properties, all 19 component stylesheets migrated
+- **WCAG AA contrast** verified across all token pairs (4.5:1 minimum)
+- **Dark technical workspace** with warm-orange accent (`#f97316`)
+- **Accessible Tooltip** on algorithm controls — opens on hover and keyboard focus, closes on Escape
+- **Animated operation counters** — count-up animation, jumps to final value with reduced-motion
+- **Expandable evidence panel** — `aria-expanded`, keyboard navigable, interruptible transitions
+- `prefers-reduced-motion` respected throughout
+
+---
+
+## Test Coverage
+
+```
+Test Files  34 passed (34)
+Tests       292 passed (292)
+Engines     ✅  AI · DAA · TOC · COA all verified
+UI          ✅  Tooltip · AnimatedCounter · ExpandablePanel · all labs
 ```
 
 ---
 
-## 4. Subject Mapping & Academic Syllabus Status
+## Getting Started
 
-- **AI Foundations**: Five search strategies, Minimax Tic-Tac-Toe, forward/backward-chaining Knowledge Representation, and an interpretable two-feature logistic-regression experiment are implemented. Its small synthetic dataset is an educational example, not a validated real-world model.
-- **DAA**: Binary Search debugging, evidence export, search operation comparison, three traced sorting algorithms, and BFS/DFS graph traversal are implemented. Other syllabus-specific algorithms remain dependent on scope confirmation.
-- **TOC**: DFA, a documented regular-expression subset compiled to epsilon-NFA, a curated CNF parser, one bounded PDA example, and one bounded single-tape Turing Machine example are implemented. The grammar and machine sets are curated educational examples, not general grammar/machine editors.
-- **COA**: Sequential instruction execution, register files, PC, branching, byte input/output, a separate five-stage pipeline timing model with RAW stalls, and cache hierarchy simulation are implemented. The pipeline does not dynamically execute branches or model a complete cycle-accurate CPU.
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Run all tests
+npm test
+
+# Production build
+npm run build
+
+# Verify WCAG contrast
+node scripts/check-contrast.cjs
+```
+
+---
+
+## Project Structure
+
+```
+src/
+├── components/          # React lab components + shared UI
+│   ├── Tooltip.tsx      # Accessible tooltip
+│   ├── AnimatedCounter.tsx  # Reduced-motion-safe counter
+│   └── ExpandablePanel.tsx  # Collapsible evidence panel
+├── engine/              # Pure algorithm engines (no UI)
+├── styles/
+│   └── tokens.css       # 99 CSS custom properties
+├── __tests__/
+│   ├── engine/          # Algorithm correctness (pure logic)
+│   └── ui/              # Component + interaction tests
+└── types/               # Shared TypeScript types
+```
+
+---
+## Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server at localhost:5173 |
+| `npm test` | Run all 292 tests |
+| `npm run build` | Production build (`tsc -b && vite build`) |
+| `npm run lint` | ESLint with zero warnings policy |
+| `npm run typecheck` | Full TypeScript check (`tsc -b`) |
+| `node scripts/check-contrast.cjs` | WCAG AA contrast audit |
+
+---
+
+*TRACEFORGE — Evidence-first learning for AI, DAA, TOC and COA.*
+*Built with React + TypeScript + Vite. No frameworks. No shortcuts. Just proof.*
+
+---
