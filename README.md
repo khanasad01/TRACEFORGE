@@ -5,6 +5,9 @@
 
 TRACEFORGE is an educational laboratory for computer-science students and instructors. It connects reproducible computational experiments to concrete execution evidence, step-by-step traces, and conceptual understanding across four core computer science subjects.
 
+## Live Demo
+🚀 [https://traceforge-asad.netlify.app](https://traceforge-asad.netlify.app)
+
 ## What changed (UI Redesign)
 - Unified design token system (`src/styles/tokens.css`) — all 19 component stylesheets migrated
 - WCAG AA contrast verified across all token pairs  
