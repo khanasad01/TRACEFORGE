@@ -1,0 +1,68 @@
+/** ExpandablePanel — evidence-first collapsible section. */
+
+.panel {
+  background: var(--tf-color-panel);
+  border: var(--tf-line-width-thin) solid var(--tf-color-border);
+  border-radius: var(--tf-radius-md);
+  box-shadow: var(--tf-shadow-sm);
+  overflow: hidden;
+}
+
+.header {
+  margin: 0;
+  padding: var(--tf-space-xs) var(--tf-space-sm);
+  font-size: var(--tf-font-size-sm);
+  font-weight: var(--tf-font-weight-semibold);
+  color: var(--tf-color-text-bright);
+}
+
+.toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--tf-space-2xs);
+  padding: var(--tf-space-2xs) 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.toggle:focus-visible {
+  outline: var(--tf-line-width-thin) solid var(--tf-color-accent);
+  outline-offset: 2px;
+}
+
+.title {
+  flex: 1;
+}
+
+.chevron {
+  color: var(--tf-color-text-secondary);
+}
+
+.content {
+  overflow: hidden;
+  max-height: 1200px;
+  opacity: 1;
+  transition: max-height var(--tf-duration-md) var(--tf-ease-standard),
+              opacity var(--tf-duration-md) var(--tf-ease-standard);
+}
+
+.closed {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.content > :global(*) {
+  padding: var(--tf-space-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content {
+    transition: none;
+  }
+}

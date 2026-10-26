@@ -1,4 +1,5 @@
 import type { TestCase, TestResult } from '../types/domain';
+import { ExpandablePanel } from './ExpandablePanel';
 import styles from './TestResultPanel.module.css';
 
 interface Props {
@@ -28,8 +29,9 @@ export function TestResultPanel({ testCases, results, activeTestId, onSelectTest
   const resultMap = new Map(results.map((r) => [r.testId, r]));
 
   return (
-    <div className={styles.panel}>
-      <h3 className={styles.heading}>Test Cases</h3>
+    <ExpandablePanel title="Test Cases" id="test-result-panel" defaultOpen={true}>
+      <div className={styles.panel}>
+        <h3 className={styles.heading}>Test Cases</h3>
       <p className={styles.note}>
         {results.length === 0
           ? 'Run the tests to see results.'
@@ -71,5 +73,6 @@ export function TestResultPanel({ testCases, results, activeTestId, onSelectTest
         })}
       </ul>
     </div>
+    </ExpandablePanel>
   );
 }
